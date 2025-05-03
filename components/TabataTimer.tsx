@@ -45,17 +45,14 @@ const TabataTimer = () => {
   const [isRunning, setIsRunning] = useState(false);
 
   const oneRound = workTime + restTime;
-  const maxTime = oneRound * rounds - restTime;
+  const maxTime = oneRound > 0 ? oneRound * rounds - restTime : 0;
 
-  const currentRound =
-    oneRound > 0
-      ? Math.min(rounds, Math.floor((currentTime + restTime) / oneRound) + 1)
-      : 1;
-
+  const currentRound = Math.min(
+    rounds,
+    Math.floor((currentTime + restTime) / oneRound) + 1
+  );
   const isWorkPhase =
-    oneRound > 0
-      ? currentRound * oneRound - currentTime - restTime <= workTime
-      : true;
+    currentRound * oneRound - currentTime - restTime <= workTime;
 
   useEffect(() => {
     // Set the 'data-theme' attribute on <html> to toggle between light and dark themes
@@ -158,7 +155,7 @@ const TabataTimer = () => {
           <input
             className={styles.timerInput}
             type="number"
-            min={0}
+            min={1}
             value={rounds}
             onChange={(e) => setRounds(Number(e.target.value))}
           />
