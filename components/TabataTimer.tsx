@@ -158,7 +158,13 @@ const TabataTimer = () => {
             className={styles.timerDisplayIcon}
             icon={isWorkPhase ? faRunning : faHand}
           />
-          <span>{formatTime(currentTime)}</span>
+          <span>
+            {formatTime(
+              isWorkPhase
+                ? Math.max(workTime - (currentTime % oneRound), 0) // Work phase remaining time
+                : Math.max(restTime - ((currentTime % oneRound) - workTime), 0) // Rest phase remaining time
+            )}
+          </span>
         </div>
 
         <div className={styles.roundStatus}>
