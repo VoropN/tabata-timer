@@ -11,17 +11,6 @@ import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import styles from './TabataTimer.module.scss';
 
-interface TimerState {
-  workTime: number;
-  restTime: number;
-  roundsCount: number;
-  seconds: number;
-  isRunning: boolean;
-  isWorkPhase: boolean;
-  rounds: number;
-  currentRound: number;
-}
-
 enum LocalStorageKey {
   theme,
   fontSize,
