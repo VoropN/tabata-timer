@@ -1,6 +1,11 @@
 'use client';
 
-import { faChair, faRunning } from '@fortawesome/free-solid-svg-icons';
+import {
+  faChair,
+  faMinus,
+  faPlus,
+  faRunning,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import styles from './TabataTimer.module.scss';
@@ -16,10 +21,22 @@ interface TimerState {
   currentRound: number;
 }
 
+enum LocalStorageKey {
+  fontSize,
+  workTime,
+  restTime,
+  roundsCount,
+}
+const getFromStorage = (key: LocalStorageKey, defaultValue: number) =>
+  Number(localStorage.getItem(String(key)) || defaultValue);
+const saveToStorage = (key: LocalStorageKey, value: number) =>
+  localStorage.setItem(String(key), String(value));
+
 const TabataTimer = () => {
-  const [workTime, setWorkTime] = useState<number>(20);
-  const [restTime, setRestTime] = useState<number>(10);
-  const [roundsCount, setRoundsCount] = useState<number>(8);
+  const [fontSize, setFontSize] = useState<number>(20);
+  const [workTime, setWorkTime] = useState<number>(0);
+  const [restTime, setRestTime] = useState<number>(0);
+  const [roundsCount, setRoundsCount] = useState<number>(0);
   const [timerState, setTimerState] = useState<TimerState>({
     workTime,
     restTime,
@@ -37,6 +54,20 @@ const TabataTimer = () => {
     // Set the 'data-theme' attribute on <html> to toggle between light and dark themes
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
+
+  useEffect(() => {
+    setFontSize(getFromStorage(LocalStorageKey.fontSize, 20));
+    setWorkTime(getFromStorage(LocalStorageKey.workTime, 20));
+    setRestTime(getFromStorage(LocalStorageKey.restTime, 10));
+    setRoundsCount(getFromStorage(LocalStorageKey.roundsCount, 8));
+  }, []);
+
+  useEffect(() => {
+    saveToStorage(LocalStorageKey.fontSize, fontSize);
+    saveToStorage(LocalStorageKey.workTime, workTime);
+    saveToStorage(LocalStorageKey.restTime, restTime);
+    saveToStorage(LocalStorageKey.roundsCount, roundsCount);
+  }, [fontSize, workTime, restTime, roundsCount]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -135,9 +166,21 @@ const TabataTimer = () => {
   };
 
   return (
-    <div className={styles.timerContainer}>
+    <div className={styles.timerContainer} style={{ fontSize }}>
       <div className={styles.timerHeader}>
+        <button
+          className={styles.changeSize}
+          onClick={() => setFontSize((prevSize) => prevSize + 1)}
+        >
+          <FontAwesomeIcon icon={faPlus} size="lg" />
+        </button>
         {formatTime(calculateTotalRemainingTime())}
+        <button
+          className={styles.changeSize}
+          onClick={() => setFontSize((prevSize) => prevSize - 1)}
+        >
+          <FontAwesomeIcon icon={faMinus} size="lg" />
+        </button>
       </div>
 
       <div className={styles.timerControls}>
@@ -173,9 +216,16 @@ const TabataTimer = () => {
       </div>
       <div className={styles.timerDisplay}>
         {timerState.isWorkPhase ? (
-          <FontAwesomeIcon icon={faRunning} size="2x" />
+          <FontAwesomeIcon
+            className={styles.timerDisplayIcon}
+            icon={faRunning}
+          />
         ) : (
-          <FontAwesomeIcon icon={faChair} size="2x" color="grey" />
+          <FontAwesomeIcon
+            className={styles.timerDisplayIcon}
+            icon={faChair}
+            color="grey"
+          />
         )}
         <span>{formatTime(timerState.seconds)}</span>
       </div>
@@ -198,7 +248,7 @@ const TabataTimer = () => {
           className={styles.timerButton}
           onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
         >
-          Toggle Theme
+          Theme
         </button>
       </div>
     </div>
