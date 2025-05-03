@@ -22,17 +22,20 @@ interface TimerState {
 }
 
 enum LocalStorageKey {
+  theme,
   fontSize,
   workTime,
   restTime,
   roundsCount,
 }
-const getFromStorage = (key: LocalStorageKey, defaultValue: number) =>
-  Number(localStorage.getItem(String(key)) || defaultValue);
-const saveToStorage = (key: LocalStorageKey, value: number) =>
+const getFromStorage = (key: LocalStorageKey, defaultValue: unknown): any =>
+  localStorage.getItem(String(key)) || defaultValue;
+const saveToStorage = (key: LocalStorageKey, value: unknown) =>
   localStorage.setItem(String(key), String(value));
 
 const TabataTimer = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [fontSize, setFontSize] = useState<number>(20);
   const [workTime, setWorkTime] = useState<number>(0);
   const [restTime, setRestTime] = useState<number>(0);
@@ -48,26 +51,27 @@ const TabataTimer = () => {
     currentRound: 1,
   });
 
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
-
   useEffect(() => {
     // Set the 'data-theme' attribute on <html> to toggle between light and dark themes
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
   useEffect(() => {
-    setFontSize(getFromStorage(LocalStorageKey.fontSize, 20));
-    setWorkTime(getFromStorage(LocalStorageKey.workTime, 20));
-    setRestTime(getFromStorage(LocalStorageKey.restTime, 10));
-    setRoundsCount(getFromStorage(LocalStorageKey.roundsCount, 8));
+    setTheme(getFromStorage(LocalStorageKey.theme, 'light'));
+    setFontSize(Number(getFromStorage(LocalStorageKey.fontSize, 20)));
+    setWorkTime(Number(getFromStorage(LocalStorageKey.workTime, 20)));
+    setRestTime(Number(getFromStorage(LocalStorageKey.restTime, 10)));
+    setRoundsCount(Number(getFromStorage(LocalStorageKey.roundsCount, 8)));
+    setIsLoading(false);
   }, []);
 
   useEffect(() => {
+    saveToStorage(LocalStorageKey.theme, theme);
     saveToStorage(LocalStorageKey.fontSize, fontSize);
     saveToStorage(LocalStorageKey.workTime, workTime);
     saveToStorage(LocalStorageKey.restTime, restTime);
     saveToStorage(LocalStorageKey.roundsCount, roundsCount);
-  }, [fontSize, workTime, restTime, roundsCount]);
+  }, [theme, fontSize, workTime, restTime, roundsCount]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -164,6 +168,10 @@ const TabataTimer = () => {
       remainingRounds * timePerRound + timerState.seconds;
     return totalTimeRemaining;
   };
+
+  if (isLoading) {
+    return <></>;
+  }
 
   return (
     <div className={styles.timerContainer} style={{ fontSize }}>
