@@ -21,13 +21,15 @@
 .timerControls {
   display: flex;
   justify-content: space-between;
-  
+  gap: 20px;
+  align-items: center;
+  min-width: 300px;
 }
 
 .timerInput {
-  padding: 8px;
+  padding: 8px 15px;
   font-size: 1rem;
-  margin-top: 5px;
+  width: 80px;
 }
 
 /* Display timer phase and time remaining */

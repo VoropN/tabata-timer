@@ -1,0 +1,16 @@
+{
+  "name": "Tabata Timer",
+  "short_name": "Tabata",
+  "description": "A simple and customizable Tabata timer for workouts.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ff5722",
+  "icons": [
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
