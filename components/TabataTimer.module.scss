@@ -35,7 +35,17 @@
 /* Display timer phase and time remaining */
 .timerDisplay {
   font-size: 1.5rem;
-  margin-top: 20px;
+  margin: 20px 0;
+  min-width: 150px;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+}
+
+.phaseName {
+  color: var(--primary-color);
+  font-weight: bold;
+  text-transform: uppercase;
 }
 
 .roundStatus {

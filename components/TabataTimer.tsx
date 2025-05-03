@@ -1,5 +1,7 @@
 'use client';
 
+import { faChair, faRunning } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import styles from './TabataTimer.module.scss';
 
@@ -135,7 +137,7 @@ const TabataTimer = () => {
   return (
     <div className={styles.timerContainer}>
       <div className={styles.timerHeader}>
-        Total Time Remaining: {formatTime(calculateTotalRemainingTime())}
+        Remaining: {formatTime(calculateTotalRemainingTime())}
       </div>
 
       <div className={styles.timerControls}>
@@ -166,9 +168,16 @@ const TabataTimer = () => {
         />
       </div>
 
+      <div className={styles.phaseName}>
+        {timerState.isWorkPhase ? <>Work Phase</> : <>Rest Phase</>}
+      </div>
       <div className={styles.timerDisplay}>
-        {timerState.isWorkPhase ? 'Work' : 'Rest'} Phase:{' '}
-        {formatTime(timerState.seconds)}
+        {timerState.isWorkPhase ? (
+          <FontAwesomeIcon icon={faRunning} size="2x" />
+        ) : (
+          <FontAwesomeIcon icon={faChair} size="2x" color="grey" />
+        )}
+        <span>{formatTime(timerState.seconds)}</span>
       </div>
 
       <div className={styles.roundStatus}>
