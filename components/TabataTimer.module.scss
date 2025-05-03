@@ -4,7 +4,7 @@
 .timerContainer {
   display: grid;
   justify-content: center;
-  padding: 20px;
+  padding: 10px 20px;
 }
 
 /* Header for time remaining */
@@ -66,10 +66,12 @@
   margin-top: 20px;
   gap: 10px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr 1fr auto;
+  overflow: hidden;
 }
 
-.timerButton {
+.timerButton,
+.themeButton {
   padding: 10px 20px;
   font-size: 1.2em;
   background-color: var(
@@ -79,6 +81,7 @@
   border: none;
   cursor: pointer;
   border-radius: 5px;
+  display: flex;
 
   &:hover {
     background-color: var(
@@ -94,5 +97,23 @@
 
   &:hover {
     color: var(--button-hover-color);
+  }
+}
+
+.theme {
+  color: var(--button-color);
+  font-size: 1.5em;
+
+  &Button {
+    background-color: transparent;
+    border: 1px solid var(--button-color);
+
+    &:hover {
+      background-color: transparent;
+
+      .theme {
+        color: var(--button-hover-color);
+      }
+    }
   }
 }

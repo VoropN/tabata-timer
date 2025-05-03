@@ -1,8 +1,10 @@
 'use client';
 
 import {
-  faChair,
+  faHand,
+  faLightbulb,
   faMinus,
+  faMoon,
   faPlus,
   faRunning,
 } from '@fortawesome/free-solid-svg-icons';
@@ -223,18 +225,11 @@ const TabataTimer = () => {
         {timerState.isWorkPhase ? <>Work Phase</> : <>Rest Phase</>}
       </div>
       <div className={styles.timerDisplay}>
-        {timerState.isWorkPhase ? (
-          <FontAwesomeIcon
-            className={styles.timerDisplayIcon}
-            icon={faRunning}
-          />
-        ) : (
-          <FontAwesomeIcon
-            className={styles.timerDisplayIcon}
-            icon={faChair}
-            color="grey"
-          />
-        )}
+        <FontAwesomeIcon
+          className={styles.timerDisplayIcon}
+          icon={timerState.isWorkPhase ? faRunning : faHand}
+        />
+
         <span>{formatTime(timerState.seconds)}</span>
       </div>
 
@@ -253,10 +248,14 @@ const TabataTimer = () => {
           Reset
         </button>
         <button
-          className={styles.timerButton}
+          className={styles.themeButton}
           onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
         >
-          Theme
+          <FontAwesomeIcon
+            className={styles.theme}
+            icon={theme === 'light' ? faLightbulb : faMoon}
+            color="grey"
+          />
         </button>
       </div>
     </div>
