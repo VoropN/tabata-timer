@@ -80,8 +80,6 @@ const TabataTimer = () => {
           return { ...prevState, seconds: newSeconds };
         });
       }, 1000);
-    } else if (!timerState.isRunning && timerState.seconds !== 0) {
-      clearInterval(interval);
     }
 
     return () => clearInterval(interval);
@@ -93,6 +91,7 @@ const TabataTimer = () => {
     timerState.roundsCount,
     workTime,
     restTime,
+    roundsCount,
   ]);
 
   const handleStartStop = () => {
