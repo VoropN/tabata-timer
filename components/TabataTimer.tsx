@@ -3,12 +3,11 @@
 import {
   faHand,
   faLightbulb,
-  faMinus,
   faMoon,
-  faPlus,
   faRunning,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import styles from './TabataTimer.module.scss';
 
@@ -176,89 +175,88 @@ const TabataTimer = () => {
   }
 
   return (
-    <div className={styles.timerContainer} style={{ fontSize }}>
-      <div className={styles.timerHeader}>
-        <button
-          className={styles.changeSize}
-          onClick={() => setFontSize((prevSize) => prevSize + 1)}
-        >
-          <FontAwesomeIcon icon={faPlus} size="lg" />
-        </button>
-        {formatTime(calculateTotalRemainingTime())}
-        <button
-          className={styles.changeSize}
-          onClick={() => setFontSize((prevSize) => prevSize - 1)}
-        >
-          <FontAwesomeIcon icon={faMinus} size="lg" />
-        </button>
-      </div>
-
-      <div className={styles.timerControls}>
-        <label>Work Time (seconds): </label>
+    <>
+      <div className={styles.rangeContainer}>
         <input
-          className={styles.timerInput}
-          type="number"
-          value={workTime}
-          onChange={(e) => setWorkTime(Number(e.target.value))}
+          type="range"
+          value={fontSize}
+          min={10}
+          onChange={({ target }) => setFontSize(+target.value)}
+          step=".1"
+          className={clsx(theme, styles.range)}
         />
       </div>
-      <div className={styles.timerControls}>
-        <label>Rest Time (seconds): </label>
-        <input
-          className={styles.timerInput}
-          type="number"
-          value={restTime}
-          onChange={(e) => setRestTime(Number(e.target.value))}
-        />
-      </div>
-      <div className={styles.timerControls}>
-        <label>Rounds: </label>
-        <input
-          className={styles.timerInput}
-          type="number"
-          value={roundsCount}
-          onChange={(e) => setRoundsCount(Number(e.target.value))}
-        />
-      </div>
+      <div className={styles.timerContainer} style={{ fontSize }}>
+        <div className={styles.timerHeader}>
+          {formatTime(calculateTotalRemainingTime())}
+        </div>
 
-      <div className={styles.phaseName}>
-        {timerState.isWorkPhase ? <>Work Phase</> : <>Rest Phase</>}
-      </div>
-      <div className={styles.timerDisplay}>
-        <FontAwesomeIcon
-          className={styles.timerDisplayIcon}
-          icon={timerState.isWorkPhase ? faRunning : faHand}
-        />
-
-        <span>{formatTime(timerState.seconds)}</span>
-      </div>
-
-      <div className={styles.roundStatus}>
-        <span>Round: </span>
-        <span className={styles.roundStatusNumber}>
-          {timerState.currentRound}/{roundsCount}
-        </span>
-      </div>
-
-      <div className={styles.timerButtonContainer}>
-        <button className={styles.timerButton} onClick={handleStartStop}>
-          {timerState.isRunning ? 'Stop' : 'Start'}
-        </button>
-        <button className={styles.timerButton} onClick={handleReset}>
-          Reset
-        </button>
-        <button
-          className={styles.themeButton}
-          onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-        >
-          <FontAwesomeIcon
-            className={styles.theme}
-            icon={theme === 'light' ? faLightbulb : faMoon}
-            color="grey"
+        <div className={styles.timerControls}>
+          <label>Work Time (seconds): </label>
+          <input
+            className={styles.timerInput}
+            type="number"
+            value={workTime}
+            onChange={(e) => setWorkTime(Number(e.target.value))}
           />
-        </button>
+        </div>
+        <div className={styles.timerControls}>
+          <label>Rest Time (seconds): </label>
+          <input
+            className={styles.timerInput}
+            type="number"
+            value={restTime}
+            onChange={(e) => setRestTime(Number(e.target.value))}
+          />
+        </div>
+        <div className={styles.timerControls}>
+          <label>Rounds: </label>
+          <input
+            className={styles.timerInput}
+            type="number"
+            value={roundsCount}
+            onChange={(e) => setRoundsCount(Number(e.target.value))}
+          />
+        </div>
+
+        <div className={styles.phaseName}>
+          {timerState.isWorkPhase ? <>Work Phase</> : <>Rest Phase</>}
+        </div>
+        <div className={styles.timerDisplay}>
+          <FontAwesomeIcon
+            className={styles.timerDisplayIcon}
+            icon={timerState.isWorkPhase ? faRunning : faHand}
+          />
+          <span>{formatTime(timerState.seconds)}</span>
+        </div>
+
+        <div className={styles.roundStatus}>
+          <span>Round: </span>
+          <span className={styles.roundStatusNumber}>
+            {timerState.currentRound}/{roundsCount}
+          </span>
+        </div>
+
+        <div className={styles.timerButtonContainer}>
+          <button className={styles.timerButton} onClick={handleStartStop}>
+            {timerState.isRunning ? 'Stop' : 'Start'}
+          </button>
+          <button className={styles.timerButton} onClick={handleReset}>
+            Reset
+          </button>
+          <button
+            className={styles.themeButton}
+            onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+          >
+            <FontAwesomeIcon
+              className={styles.theme}
+              icon={theme === 'light' ? faLightbulb : faMoon}
+              color="grey"
+            />
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
