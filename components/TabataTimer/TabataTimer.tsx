@@ -10,7 +10,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ChangeSize from '../ChangeSize';
 import styles from './TabataTimer.module.scss';
 
@@ -87,6 +87,51 @@ const TabataTimer = () => {
     return () => clearInterval(interval);
   }, [maxTime, isRunning]);
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const increaseFontSizeUntilFit = () => {
+      if (!containerRef.current) return;
+      const container = containerRef.current;
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+
+      if (
+        container.clientWidth < windowWidth - 40 && // Container width less than 90% of window width
+        container.clientHeight < windowHeight - 40
+      ) {
+        setTimeout(() => {
+          setFontSize(fontSize + 1);
+        }, 50);
+      }
+
+      if (
+        container.clientWidth >= windowWidth ||
+        container.clientHeight + 10 >= windowHeight
+      ) {
+        setTimeout(() => {
+          setFontSize(fontSize - 1);
+        }, 50);
+      }
+    };
+
+    increaseFontSizeUntilFit();
+
+    // Listen for window resize event
+    const handleResize = () => {
+      increaseFontSizeUntilFit(); // Recalculate font size on window resize
+    };
+
+    increaseFontSizeUntilFit();
+    // Add event listener for window resize
+    window.addEventListener('resize', handleResize);
+
+    // Clean up event listener when the component is unmounted
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [fontSize, containerRef.current]);
+
   const handleReset = () => {
     setCurrentTime(0);
     setIsRunning(false);
@@ -107,17 +152,11 @@ const TabataTimer = () => {
 
   return (
     <>
-      <div className={styles.rangeContainer}>
-        <input
-          type="range"
-          value={fontSize}
-          min={10}
-          onChange={({ target }) => setFontSize(+target.value)}
-          step=".1"
-          className={clsx(theme, styles.range)}
-        />
-      </div>
-      <div className={styles.timerContainer} style={{ fontSize }}>
+      <div
+        ref={containerRef}
+        className={styles.timerContainer}
+        style={{ fontSize }}
+      >
         <div className={styles.timerHeader}>
           {formatTime(maxTime - currentTime)}
         </div>
@@ -126,45 +165,27 @@ const TabataTimer = () => {
           <label>Work Time (seconds): </label>
           <ChangeSize
             increaseSize={() => setWorkTime((prev) => prev + 1)}
-            decreaseSize={() => setWorkTime((prev) => prev - 1)}
+            decreaseSize={() => workTime > 1 && setWorkTime((prev) => prev - 1)}
           >
-            <input
-              className={styles.timerInput}
-              type="number"
-              min={0}
-              value={workTime}
-              onChange={(e) => setWorkTime(Number(e.target.value))}
-            />
+            <span className={styles.timerInput}>{workTime}</span>
           </ChangeSize>
         </div>
         <div className={styles.timerControls}>
           <label>Rest Time (seconds): </label>
           <ChangeSize
             increaseSize={() => setRestTime((prev) => prev + 1)}
-            decreaseSize={() => setRestTime((prev) => prev - 1)}
+            decreaseSize={() => restTime > 0 && setRestTime((prev) => prev - 1)}
           >
-            <input
-              className={styles.timerInput}
-              type="number"
-              min={0}
-              value={restTime}
-              onChange={(e) => setRestTime(Number(e.target.value))}
-            />
+            <span className={styles.timerInput}>{restTime}</span>
           </ChangeSize>
         </div>
         <div className={styles.timerControls}>
           <label>Rounds: </label>
           <ChangeSize
             increaseSize={() => setRounds((prev) => prev + 1)}
-            decreaseSize={() => setRounds((prev) => prev - 1)}
+            decreaseSize={() => rounds > 1 && setRounds((prev) => prev - 1)}
           >
-            <input
-              className={styles.timerInput}
-              type="number"
-              min={1}
-              value={rounds}
-              onChange={(e) => setRounds(Number(e.target.value))}
-            />
+            <span className={styles.timerInput}>{rounds}</span>
           </ChangeSize>
         </div>
 

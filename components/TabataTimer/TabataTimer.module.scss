@@ -4,6 +4,7 @@
   padding: 0 20px;
   width: max-content;
   margin: auto;
+  transition: font-size 0.2s ease;
 }
 
 /* Header for time remaining */
@@ -28,7 +29,6 @@
 .timerInput {
   padding: 8px 15px;
   font-size: 1.2em;
-  width: 100px;
   text-align: right;
 }
 
@@ -140,45 +140,5 @@
     .icon {
       color: var(--button-hover-color);
     }
-  }
-}
-
-.range {
-  color: var(--button-color);
-  width: 100%;
-  -webkit-appearance: none; /* Override default CSS styles */
-  appearance: none;
-  height: 10px; /* Specified height */
-  background: #d3d3d3; /* Grey background */
-  outline: none; /* Remove outline */
-  opacity: 0.9; /* Set transparency (for mouse-over effects on hover) */
-  -webkit-transition: 0.2s; /* 0.2 seconds transition on hover */
-  transition: opacity 0.2s;
-  border-radius: 4px;
-
-  &::-webkit-slider-thumb {
-    -webkit-appearance: none; /* Override default look */
-    appearance: none;
-    background: var(--button-color);
-    width: 25px; /* Set a specific slider handle width */
-    height: 25px; /* Slider handle height */
-    border-radius: 50%;
-    cursor: pointer; /* Cursor on hover */
-  }
-
-  &::-moz-range-thumb {
-    background: var(--button-color);
-    width: 25px; /* Set a specific slider handle width */
-    height: 25px; /* Slider handle height */
-    border-radius: 50%;
-    cursor: pointer; /* Cursor on hover */
-  }
-
-  &:hover {
-    opacity: 1; /* Fully shown on mouse-over */
-  }
-
-  &Container {
-    margin: 10px 10px 0;
   }
 }
