@@ -4,6 +4,8 @@ import {
   faHand,
   faLightbulb,
   faMoon,
+  faPause,
+  faPlay,
   faRunning,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -171,7 +173,9 @@ const TabataTimer = () => {
         </div>
         <div className={styles.timerDisplay}>
           <FontAwesomeIcon
-            className={styles.timerDisplayIcon}
+            className={clsx(styles.timerDisplayIcon, {
+              [styles.stop]: !isWorkPhase,
+            })}
             icon={isWorkPhase ? faRunning : faHand}
           />
           <span>
@@ -192,20 +196,24 @@ const TabataTimer = () => {
 
         <div className={styles.timerButtonContainer}>
           <button
-            className={styles.timerButton}
+            className={styles.iconButton}
             onClick={() => setIsRunning(!isRunning)}
           >
-            {isRunning ? 'Stop' : 'Start'}
+            <FontAwesomeIcon
+              className={clsx(styles.icon, { [styles.play]: !isRunning })}
+              icon={isRunning ? faPause : faPlay}
+              color="grey"
+            />
           </button>
           <button className={styles.timerButton} onClick={handleReset}>
             Reset
           </button>
           <button
-            className={styles.themeButton}
+            className={styles.iconButton}
             onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
           >
             <FontAwesomeIcon
-              className={styles.theme}
+              className={clsx(styles.icon)}
               icon={theme === 'light' ? faLightbulb : faMoon}
               color="grey"
             />
