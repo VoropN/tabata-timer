@@ -97,20 +97,20 @@ const TabataTimer = () => {
       const windowHeight = window.innerHeight;
 
       if (
-        container.clientWidth < windowWidth - 40 && // Container width less than 90% of window width
-        container.clientHeight < windowHeight - 40
+        container.clientWidth < windowWidth - 10 && // Container width less than 90% of window width
+        container.clientHeight < windowHeight - 10
       ) {
         setTimeout(() => {
-          setFontSize(fontSize + 1);
+          setFontSize(fontSize + 0.1);
         }, 50);
       }
 
       if (
         container.clientWidth >= windowWidth ||
-        container.clientHeight + 10 >= windowHeight
+        container.clientHeight >= windowHeight
       ) {
         setTimeout(() => {
-          setFontSize(fontSize - 1);
+          setFontSize(fontSize - 0.1);
         }, 50);
       }
     };
