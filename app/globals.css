@@ -24,3 +24,33 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
+/* globals.css */
+
+/* globals.css */
+
+/* Default light theme (applies globally) */
+:root {
+  --primary-color: #4CAF50;
+  --background-color: #ffffff;
+  --text-color: #333333;
+  --button-color: #4CAF50;
+  --button-hover-color: #45a049;
+}
+
+/* Dark theme (applies when data-theme="dark") */
+[data-theme="dark"] {
+  --primary-color: #ff5722;  /* Orange */
+  --background-color: #333333;
+  --text-color: #ffffff;
+  --button-color: #ff5722;
+  --button-hover-color: #e64a19;
+}
+
+/* Ensure background and text color is updated for dark theme */
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+

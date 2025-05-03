@@ -1,0 +1,67 @@
+/* TabataTimer.module.scss */
+
+/* Timer container */
+.timerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* Header for time remaining */
+.timerHeader {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: var(--primary-color); /* Color will be affected by global theme */
+  font-weight: bold;
+}
+
+/* Input fields and labels */
+.timerControls {
+  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.timerInput {
+  padding: 8px;
+  font-size: 1rem;
+  margin-top: 5px;
+}
+
+/* Display timer phase and time remaining */
+.timerDisplay {
+  font-size: 1.5rem;
+  margin-top: 20px;
+}
+
+.roundStatus {
+  font-size: 1.2rem;
+  margin-top: 5px;
+}
+
+/* Button container */
+.timerButtonContainer {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.timerButton {
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  background-color: var(
+    --button-color
+  ); /* Color will be affected by global theme */
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.timerButton:hover {
+  background-color: var(
+    --button-hover-color
+  ); /* Hover color will be affected by global theme */
+}
