@@ -1,0 +1,10 @@
+
+.changeSize {
+  font-size: 1em;
+  cursor: pointer;
+  color: var(--button-color);
+
+  &:hover {
+    color: var(--button-hover-color);
+  }
+}

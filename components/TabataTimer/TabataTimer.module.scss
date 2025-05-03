@@ -17,9 +17,9 @@
 
 /* Input fields and labels */
 .timerControls {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 40px;
   align-items: center;
 }
 
@@ -27,6 +27,7 @@
   padding: 8px 15px;
   font-size: 1.2em;
   width: 100px;
+  text-align: right;
 }
 
 /* Display timer phase and time remaining */
@@ -82,16 +83,6 @@
     background-color: var(
       --button-hover-color
     ); /* Hover color will be affected by global theme */
-  }
-}
-
-.changeSize {
-  font-size: 0.5em;
-  cursor: pointer;
-  color: var(--button-color);
-
-  &:hover {
-    color: var(--button-hover-color);
   }
 }
 

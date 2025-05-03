@@ -9,6 +9,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
+import ChangeSize from '../ChangeSize';
 import styles from './TabataTimer.module.scss';
 
 enum LocalStorageKey {
@@ -121,33 +122,48 @@ const TabataTimer = () => {
 
         <div className={styles.timerControls}>
           <label>Work Time (seconds): </label>
-          <input
-            className={styles.timerInput}
-            type="number"
-            min={0}
-            value={workTime}
-            onChange={(e) => setWorkTime(Number(e.target.value))}
-          />
+          <ChangeSize
+            increaseSize={() => setWorkTime((prev) => prev + 1)}
+            decreaseSize={() => setWorkTime((prev) => prev - 1)}
+          >
+            <input
+              className={styles.timerInput}
+              type="number"
+              min={0}
+              value={workTime}
+              onChange={(e) => setWorkTime(Number(e.target.value))}
+            />
+          </ChangeSize>
         </div>
         <div className={styles.timerControls}>
           <label>Rest Time (seconds): </label>
-          <input
-            className={styles.timerInput}
-            type="number"
-            min={0}
-            value={restTime}
-            onChange={(e) => setRestTime(Number(e.target.value))}
-          />
+          <ChangeSize
+            increaseSize={() => setRestTime((prev) => prev + 1)}
+            decreaseSize={() => setRestTime((prev) => prev - 1)}
+          >
+            <input
+              className={styles.timerInput}
+              type="number"
+              min={0}
+              value={restTime}
+              onChange={(e) => setRestTime(Number(e.target.value))}
+            />
+          </ChangeSize>
         </div>
         <div className={styles.timerControls}>
           <label>Rounds: </label>
-          <input
-            className={styles.timerInput}
-            type="number"
-            min={1}
-            value={rounds}
-            onChange={(e) => setRounds(Number(e.target.value))}
-          />
+          <ChangeSize
+            increaseSize={() => setRounds((prev) => prev + 1)}
+            decreaseSize={() => setRounds((prev) => prev - 1)}
+          >
+            <input
+              className={styles.timerInput}
+              type="number"
+              min={1}
+              value={rounds}
+              onChange={(e) => setRounds(Number(e.target.value))}
+            />
+          </ChangeSize>
         </div>
 
         <div className={styles.phaseName}>
