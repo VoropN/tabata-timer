@@ -1,13 +1,12 @@
 .timerContainer {
   display: grid;
   justify-content: center;
-  padding: 10px 20px;
+  padding: 0 20px;
 }
 
 /* Header for time remaining */
 .timerHeader {
   font-size: 3em;
-  margin-bottom: 20px;
   color: var(--primary-color); /* Color will be affected by global theme */
   font-weight: bold;
   text-align: center;
@@ -52,7 +51,6 @@
 
 .roundStatus {
   font-size: 1.2em;
-  margin-top: 5px;
   justify-content: space-around;
   align-items: center;
   display: flex;
@@ -151,6 +149,6 @@
   }
 
   &Container {
-    margin: 10px;
+    margin: 10px 10px 0;
   }
 }

@@ -27,7 +27,7 @@ enum LocalStorageKey {
   fontSize,
   workTime,
   restTime,
-  roundsCount,
+  rounds,
 }
 const getFromStorage = (key: LocalStorageKey, defaultValue: unknown): any =>
   localStorage.getItem(String(key)) || defaultValue;
@@ -38,19 +38,24 @@ const TabataTimer = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [fontSize, setFontSize] = useState<number>(20);
-  const [workTime, setWorkTime] = useState<number>(0);
-  const [restTime, setRestTime] = useState<number>(0);
-  const [roundsCount, setRoundsCount] = useState<number>(0);
-  const [timerState, setTimerState] = useState<TimerState>({
-    workTime,
-    restTime,
-    roundsCount,
-    seconds: workTime,
-    isRunning: false,
-    isWorkPhase: true,
-    rounds: 0,
-    currentRound: 1,
-  });
+  const [workTime, setWorkTime] = useState<number>(20); // sensible defaults
+  const [restTime, setRestTime] = useState<number>(10);
+  const [rounds, setRounds] = useState<number>(8);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [isRunning, setIsRunning] = useState(false);
+
+  const oneRound = workTime + restTime;
+  const maxTime = oneRound * rounds - restTime;
+
+  const currentRound =
+    oneRound > 0
+      ? Math.min(rounds, Math.floor((currentTime + restTime) / oneRound) + 1)
+      : 1;
+
+  const isWorkPhase =
+    oneRound > 0
+      ? currentRound * oneRound - currentTime - restTime <= workTime
+      : true;
 
   useEffect(() => {
     // Set the 'data-theme' attribute on <html> to toggle between light and dark themes
@@ -62,112 +67,49 @@ const TabataTimer = () => {
     setFontSize(Number(getFromStorage(LocalStorageKey.fontSize, 20)));
     setWorkTime(Number(getFromStorage(LocalStorageKey.workTime, 20)));
     setRestTime(Number(getFromStorage(LocalStorageKey.restTime, 10)));
-    setRoundsCount(Number(getFromStorage(LocalStorageKey.roundsCount, 8)));
+    setRounds(Number(getFromStorage(LocalStorageKey.rounds, 8)));
     setIsLoading(false);
   }, []);
 
   useEffect(() => {
     saveToStorage(LocalStorageKey.theme, theme);
     saveToStorage(LocalStorageKey.fontSize, fontSize);
+
     saveToStorage(LocalStorageKey.workTime, workTime);
     saveToStorage(LocalStorageKey.restTime, restTime);
-    saveToStorage(LocalStorageKey.roundsCount, roundsCount);
-  }, [theme, fontSize, workTime, restTime, roundsCount]);
+    saveToStorage(LocalStorageKey.rounds, rounds);
+  }, [theme, fontSize, workTime, restTime, rounds]);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    if (!isRunning) return;
 
-    if (timerState.isRunning) {
-      interval = setInterval(() => {
-        setTimerState((prevState) => {
-          const newSeconds =
-            prevState.seconds === 0
-              ? prevState.isWorkPhase
-                ? restTime
-                : workTime
-              : prevState.seconds - 1;
-
-          let newRounds = prevState.rounds;
-          let newCurrentRound = prevState.currentRound;
-
-          if (prevState.seconds === 0) {
-            const isWorkPhase = !prevState.isWorkPhase;
-            if (!isWorkPhase) {
-              newRounds += 1;
-              newCurrentRound += 1;
-              if (newRounds === roundsCount) {
-                return {
-                  ...prevState,
-                  isRunning: false,
-                  rounds: 0,
-                  currentRound: 1,
-                  seconds: 0,
-                };
-              }
-            }
-
-            return {
-              ...prevState,
-              isWorkPhase: isWorkPhase,
-              rounds: newRounds,
-              currentRound: newCurrentRound,
-              seconds: newSeconds,
-            };
-          }
-
-          return { ...prevState, seconds: newSeconds };
-        });
-      }, 1000);
-    }
+    const interval = setInterval(() => {
+      setCurrentTime((prev) => {
+        const next = prev + 1;
+        if (next >= maxTime) {
+          clearInterval(interval);
+          setCurrentTime(0);
+          setIsRunning(false);
+        }
+        return prev + 1;
+      });
+    }, 1000);
 
     return () => clearInterval(interval);
-  }, [
-    timerState.isRunning,
-    timerState.seconds,
-    timerState.isWorkPhase,
-    timerState.rounds,
-    timerState.roundsCount,
-    workTime,
-    restTime,
-    roundsCount,
-  ]);
-
-  const handleStartStop = () => {
-    setTimerState((prevState) => ({
-      ...prevState,
-      isRunning: !prevState.isRunning,
-    }));
-  };
+  }, [maxTime, isRunning]);
 
   const handleReset = () => {
-    setTimerState({
-      workTime,
-      restTime,
-      roundsCount,
-      seconds: workTime,
-      isRunning: false,
-      isWorkPhase: true,
-      rounds: 0,
-      currentRound: 1,
-    });
+    setCurrentTime(0);
+    setIsRunning(false);
   };
 
   // Format time remaining as mm:ss
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    return `${minutes < 10 ? '0' : ''}${minutes}:${
-      remainingSeconds < 10 ? '0' : ''
-    }${remainingSeconds}`;
-  };
-
-  // Calculate the total remaining time for the whole workout (work + rest for remaining rounds)
-  const calculateTotalRemainingTime = () => {
-    const remainingRounds = roundsCount - timerState.rounds;
-    const timePerRound = workTime + restTime;
-    const totalTimeRemaining =
-      remainingRounds * timePerRound + timerState.seconds;
-    return totalTimeRemaining;
+    return `${String(minutes).padStart(2, '0')}:${String(
+      remainingSeconds
+    ).padStart(2, '0')}`;
   };
 
   if (isLoading) {
@@ -188,7 +130,7 @@ const TabataTimer = () => {
       </div>
       <div className={styles.timerContainer} style={{ fontSize }}>
         <div className={styles.timerHeader}>
-          {formatTime(calculateTotalRemainingTime())}
+          {formatTime(maxTime - currentTime)}
         </div>
 
         <div className={styles.timerControls}>
@@ -196,6 +138,7 @@ const TabataTimer = () => {
           <input
             className={styles.timerInput}
             type="number"
+            min={0}
             value={workTime}
             onChange={(e) => setWorkTime(Number(e.target.value))}
           />
@@ -205,6 +148,7 @@ const TabataTimer = () => {
           <input
             className={styles.timerInput}
             type="number"
+            min={0}
             value={restTime}
             onChange={(e) => setRestTime(Number(e.target.value))}
           />
@@ -214,32 +158,36 @@ const TabataTimer = () => {
           <input
             className={styles.timerInput}
             type="number"
-            value={roundsCount}
-            onChange={(e) => setRoundsCount(Number(e.target.value))}
+            min={0}
+            value={rounds}
+            onChange={(e) => setRounds(Number(e.target.value))}
           />
         </div>
 
         <div className={styles.phaseName}>
-          {timerState.isWorkPhase ? <>Work Phase</> : <>Rest Phase</>}
+          {isWorkPhase ? <>Work Phase</> : <>Rest Phase</>}
         </div>
         <div className={styles.timerDisplay}>
           <FontAwesomeIcon
             className={styles.timerDisplayIcon}
-            icon={timerState.isWorkPhase ? faRunning : faHand}
+            icon={isWorkPhase ? faRunning : faHand}
           />
-          <span>{formatTime(timerState.seconds)}</span>
+          <span>{formatTime(currentTime)}</span>
         </div>
 
         <div className={styles.roundStatus}>
           <span>Round: </span>
           <span className={styles.roundStatusNumber}>
-            {timerState.currentRound}/{roundsCount}
+            {currentRound}/{rounds}
           </span>
         </div>
 
         <div className={styles.timerButtonContainer}>
-          <button className={styles.timerButton} onClick={handleStartStop}>
-            {timerState.isRunning ? 'Stop' : 'Start'}
+          <button
+            className={styles.timerButton}
+            onClick={() => setIsRunning(!isRunning)}
+          >
+            {isRunning ? 'Stop' : 'Start'}
           </button>
           <button className={styles.timerButton} onClick={handleReset}>
             Reset
