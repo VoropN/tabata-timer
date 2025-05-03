@@ -137,7 +137,7 @@ const TabataTimer = () => {
   return (
     <div className={styles.timerContainer}>
       <div className={styles.timerHeader}>
-        Remaining: {formatTime(calculateTotalRemainingTime())}
+        {formatTime(calculateTotalRemainingTime())}
       </div>
 
       <div className={styles.timerControls}>
@@ -181,7 +181,10 @@ const TabataTimer = () => {
       </div>
 
       <div className={styles.roundStatus}>
-        Round: {timerState.currentRound}/{roundsCount}
+        <span>Round: </span>
+        <span className={styles.roundStatusNumber}>
+          {timerState.currentRound}/{roundsCount}
+        </span>
       </div>
 
       <div className={styles.timerButtonContainer}>
