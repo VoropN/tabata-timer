@@ -9,7 +9,6 @@ import {
   faHand,
   faLightbulb,
   faMoon,
-  faPause,
   faPlay,
   faRunning,
 } from '@fortawesome/free-solid-svg-icons';
@@ -17,6 +16,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import ChangeSize from '../ChangeSize';
+import StopButton from '../StopButton';
 import styles from './TabataTimer.module.scss';
 
 const TabataTimer = () => {
@@ -153,12 +153,16 @@ const TabataTimer = () => {
           {isWorkPhase ? <>Work Phase</> : <>Rest Phase</>}
         </div>
         <div className={styles.timerDisplay}>
-          <FontAwesomeIcon
-            className={clsx(styles.timerDisplayIcon, {
-              [styles.stop]: !isWorkPhase,
-            })}
-            icon={isWorkPhase ? faRunning : faHand}
-          />
+          {isRunning ? (
+            <FontAwesomeIcon
+              className={clsx(styles.timerDisplayIcon, {
+                [styles.stop]: !isWorkPhase,
+              })}
+              icon={isWorkPhase ? faRunning : faHand}
+            />
+          ) : (
+            <span />
+          )}
           <span className={styles.workTime}>
             {formatTime(
               isWorkPhase
@@ -183,11 +187,14 @@ const TabataTimer = () => {
             className={styles.iconButton}
             onClick={() => setIsRunning(!isRunning)}
           >
-            <FontAwesomeIcon
-              className={clsx(styles.icon, { [styles.play]: !isRunning })}
-              icon={isRunning ? faPause : faPlay}
-              color="grey"
-            />
+            {isRunning ? (
+              <StopButton time={maxTime} currentTime={currentTime} />
+            ) : (
+              <FontAwesomeIcon
+                className={clsx(styles.icon, styles.stop)}
+                icon={faPlay}
+              />
+            )}
           </button>
           <button
             className={styles.iconButton}

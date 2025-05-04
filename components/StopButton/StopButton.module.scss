@@ -1,0 +1,16 @@
+.circleTimer {
+  width: 2em;
+  height: 2em;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--secondary-color) var(--progress),
+    transparent 0deg
+  );
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s linear;
+  position: relative;
+  font-size: 1em;
+}
