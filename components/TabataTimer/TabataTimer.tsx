@@ -3,6 +3,7 @@
 import { useWakeLock } from '@/hooks';
 import { LocalStorageKey, useLocalStorage } from '@/hooks/useLocalStorage';
 
+import { useMaxFitFontSizeToWindow } from '@/hooks/useResize';
 import {
   faClockRotateLeft,
   faHand,
@@ -14,21 +15,21 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ChangeSize from '../ChangeSize';
 import styles from './TabataTimer.module.scss';
 
 const TabataTimer = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
-  const [fontSize, setFontSize] = useState<number>(20);
   const [workTime, setWorkTime] = useState<number>(20); // sensible defaults
   const [restTime, setRestTime] = useState<number>(10);
   const [rounds, setRounds] = useState<number>(8);
   const [currentTime, setCurrentTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
+  const [container, setContainer] = useState<HTMLElement | null>(null);
 
-  const containerRef = useRef<HTMLDivElement>(null);
+  const fontSize = useMaxFitFontSizeToWindow(container);
 
   const oneRound = workTime + restTime;
   const maxTime = oneRound > 0 ? oneRound * rounds - restTime : 0;
@@ -60,32 +61,26 @@ const TabataTimer = () => {
   }, [theme]);
 
   useLocalStorage({
-    setValue: setTheme,
     key: LocalStorageKey.theme,
     value: theme,
+    setValue: setTheme,
   });
   useLocalStorage({
-    setValue: setFontSize,
-    key: LocalStorageKey.fontSize,
-    value: fontSize,
-    type: 'number',
-  });
-  useLocalStorage({
-    setValue: setWorkTime,
     key: LocalStorageKey.workTime,
     value: workTime,
+    setValue: setWorkTime,
     type: 'number',
   });
   useLocalStorage({
-    setValue: setRestTime,
     key: LocalStorageKey.restTime,
     value: restTime,
+    setValue: setRestTime,
     type: 'number',
   });
   useLocalStorage({
-    setValue: setRounds,
     key: LocalStorageKey.rounds,
     value: rounds,
+    setValue: setRounds,
     type: 'number',
   });
 
@@ -111,39 +106,6 @@ const TabataTimer = () => {
     return () => clearInterval(interval);
   }, [maxTime, isRunning]);
 
-  useEffect(() => {
-    const increaseFontSizeUntilFit = () => {
-      if (!containerRef.current) return;
-      const container = containerRef.current;
-      const windowWidth = window.innerWidth;
-      const windowHeight = window.innerHeight;
-
-      if (
-        container.clientWidth < windowWidth - 10 &&
-        container.clientHeight < windowHeight - 10
-      ) {
-        setTimeout(() => {
-          setFontSize(fontSize + 0.1);
-        }, 50);
-      }
-
-      if (
-        container.clientWidth >= windowWidth ||
-        container.clientHeight >= windowHeight
-      ) {
-        setTimeout(() => {
-          setFontSize(fontSize - 0.1);
-        }, 50);
-      }
-    };
-
-    increaseFontSizeUntilFit();
-    window.addEventListener('resize', increaseFontSizeUntilFit);
-    return () => {
-      window.removeEventListener('resize', increaseFontSizeUntilFit);
-    };
-  }, [fontSize, containerRef.current]);
-
   if (isLoading) {
     return <></>;
   }
@@ -151,9 +113,9 @@ const TabataTimer = () => {
   return (
     <>
       <div
-        ref={containerRef}
-        className={styles.timerContainer}
+        ref={(ref) => setContainer(ref)}
         style={{ fontSize }}
+        className={styles.timerContainer}
       >
         <div className={styles.timerHeader}>
           {formatTime(maxTime - currentTime)}

@@ -1,40 +1,32 @@
-// import { useEffect, useState } from 'react';
+'use client';
+import { useEffect, useState } from 'react';
 
-// export const useAutoFontSizeToWindow = (
-//   textRef: React.RefObject<HTMLElement>
-// ) => {
-//   const [fontSize, setFontSize] = useState(0);
+export const useMaxFitFontSizeToWindow = (container: HTMLElement | null) => {
+  const [fontSize, setFontSize] = useState<number>(20);
 
-//   useEffect(() => {
-//     if (!textRef.current) return;
+  useEffect(() => {
+    if (!container) return;
+    const resizeFont = () => {
+      let size = 1000;
+      container.style.fontSize = `${size}px`;
 
-//     const resizeFont = () => {
-//       const text = textRef.current!;
+      const fits = () =>
+        container.scrollWidth <= window.innerWidth &&
+        container.scrollHeight <= window.innerHeight;
 
-//       while (low <= high) {
-//         const mid = Math.floor((low + high) / 2);
-//         text.style.fontSize = `${mid}px`;
+      while (!fits() && size > 0) {
+        size -= 1;
+        container.style.fontSize = `${size}px`;
+      }
 
-//         if (
-//           text.scrollWidth <= window.innerWidth &&
-//           text.scrollHeight <= window.innerHeight
-//         ) {
-//           bestFit = mid;
-//           low = mid + 1;
-//         } else {
-//           high = mid - 1;
-//         }
-//       }
+      setFontSize(size);
+    };
 
-//       setFontSize(bestFit);
-//       text.style.fontSize = `${bestFit}px`;
-//     };
+    window.addEventListener('resize', resizeFont);
+    resizeFont();
 
-//     window.addEventListener('resize', resizeFont);
-//     resizeFont(); // Initial run
+    return () => window.removeEventListener('resize', resizeFont);
+  }, [container]);
 
-//     return () => window.removeEventListener('resize', resizeFont);
-//   }, [textRef, value]);
-
-//   return fontSize;
-// };
+  return fontSize;
+};
