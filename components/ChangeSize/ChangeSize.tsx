@@ -1,5 +1,6 @@
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useRef } from 'react';
 import styles from './ChangeSize.module.scss';
 
 interface ChangeSizeProps {
@@ -13,16 +14,35 @@ const ChangeSize: React.FC<ChangeSizeProps> = ({
   increaseSize,
   decreaseSize,
 }) => {
+  const timer = useRef<NodeJS.Timeout>(null);
+  const call = (func: () => void) => {
+    timer.current = setInterval(() => func(), 50);
+  };
+
+  const timeoutClear = () => {
+    clearInterval(timer.current ?? 0);
+  };
+
   return (
-    <div>
-      <button className={styles.changeSize} onClick={decreaseSize}>
+    <>
+      <button
+        className={styles.changeSize}
+        onMouseLeave={timeoutClear}
+        onMouseUp={timeoutClear}
+        onMouseDown={() => call(decreaseSize)}
+      >
         <FontAwesomeIcon icon={faMinus} size="lg" />
       </button>
       {children}
-      <button className={styles.changeSize} onClick={increaseSize}>
+      <button
+        className={styles.changeSize}
+        onMouseLeave={timeoutClear}
+        onMouseUp={timeoutClear}
+        onMouseDown={() => call(increaseSize)}
+      >
         <FontAwesomeIcon icon={faPlus} size="lg" />
       </button>
-    </div>
+    </>
   );
 };
 

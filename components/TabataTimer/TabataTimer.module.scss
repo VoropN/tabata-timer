@@ -4,7 +4,6 @@
   padding: 0 20px;
   width: max-content;
   margin: auto;
-  transition: font-size 0.2s ease;
   overflow: hidden;
   max-width: 100%;
   max-height: 100%;
@@ -24,15 +23,20 @@
 /* Input fields and labels */
 .timerControls {
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 40px;
+  grid-template-columns: 1fr auto auto auto;
+  gap: 10px;
   align-items: center;
+
+  label {
+    margin-right: 4em;
+  }
 }
 
 .timerInput {
   padding: 8px 15px;
   font-size: 1.2em;
   text-align: right;
+  min-width: 4em;
 }
 
 /* Display timer phase and time remaining */

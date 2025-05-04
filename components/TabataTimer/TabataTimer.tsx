@@ -165,25 +165,25 @@ const TabataTimer = () => {
           <label>Work Time (seconds): </label>
           <ChangeSize
             increaseSize={() => setWorkTime((prev) => prev + 1)}
-            decreaseSize={() => workTime > 1 && setWorkTime((prev) => prev - 1)}
+            decreaseSize={() =>
+              setWorkTime((prev) => (prev > 1 ? prev - 1 : 1))
+            }
           >
             <span className={styles.timerInput}>{workTime}</span>
           </ChangeSize>
-        </div>
-        <div className={styles.timerControls}>
           <label>Rest Time (seconds): </label>
           <ChangeSize
             increaseSize={() => setRestTime((prev) => prev + 1)}
-            decreaseSize={() => restTime > 0 && setRestTime((prev) => prev - 1)}
+            decreaseSize={() =>
+              setRestTime((prev) => (prev > 0 ? prev - 1 : 0))
+            }
           >
             <span className={styles.timerInput}>{restTime}</span>
           </ChangeSize>
-        </div>
-        <div className={styles.timerControls}>
           <label>Rounds: </label>
           <ChangeSize
             increaseSize={() => setRounds((prev) => prev + 1)}
-            decreaseSize={() => rounds > 1 && setRounds((prev) => prev - 1)}
+            decreaseSize={() => setRounds((prev) => (prev > 1 ? prev - 1 : 1))}
           >
             <span className={styles.timerInput}>{rounds}</span>
           </ChangeSize>
