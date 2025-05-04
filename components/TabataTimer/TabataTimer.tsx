@@ -162,7 +162,7 @@ const TabataTimer = () => {
         </div>
 
         <div className={styles.timerControls}>
-          <label>Work Time (seconds): </label>
+          <label>Work Time (sec): </label>
           <ChangeSize
             increaseSize={() => setWorkTime((prev) => prev + 1)}
             decreaseSize={() =>
@@ -171,7 +171,7 @@ const TabataTimer = () => {
           >
             <span className={styles.timerInput}>{workTime}</span>
           </ChangeSize>
-          <label>Rest Time (seconds): </label>
+          <label>Rest Time (sec): </label>
           <ChangeSize
             increaseSize={() => setRestTime((prev) => prev + 1)}
             decreaseSize={() =>

@@ -30,6 +30,9 @@ const ChangeSize: React.FC<ChangeSizeProps> = ({
         onMouseLeave={timeoutClear}
         onMouseUp={timeoutClear}
         onMouseDown={() => call(decreaseSize)}
+        onTouchStart={() => call(decreaseSize)}
+        onTouchEnd={timeoutClear}
+        onTouchCancel={timeoutClear}
       >
         <FontAwesomeIcon icon={faMinus} size="lg" />
       </button>
@@ -39,6 +42,9 @@ const ChangeSize: React.FC<ChangeSizeProps> = ({
         onMouseLeave={timeoutClear}
         onMouseUp={timeoutClear}
         onMouseDown={() => call(increaseSize)}
+        onTouchStart={() => call(increaseSize)}
+        onTouchEnd={timeoutClear}
+        onTouchCancel={timeoutClear}
       >
         <FontAwesomeIcon icon={faPlus} size="lg" />
       </button>
