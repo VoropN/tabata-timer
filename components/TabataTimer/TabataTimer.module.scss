@@ -107,6 +107,7 @@
   gap: 20px;
   display: grid;
   grid-template-columns: auto auto auto;
+  justify-items: center;
   overflow: hidden;
 
   .iconButton {

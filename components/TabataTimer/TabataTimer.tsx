@@ -1,6 +1,8 @@
 'use client';
 
 import { useWakeLock } from '@/hooks';
+import { LocalStorageKey, useLocalStorage } from '@/hooks/useLocalStorage';
+
 import {
   faClockRotateLeft,
   faHand,
@@ -15,18 +17,6 @@ import clsx from 'clsx';
 import { useEffect, useRef, useState } from 'react';
 import ChangeSize from '../ChangeSize';
 import styles from './TabataTimer.module.scss';
-
-enum LocalStorageKey {
-  theme,
-  fontSize,
-  workTime,
-  restTime,
-  rounds,
-}
-const getFromStorage = (key: LocalStorageKey, defaultValue: unknown): any =>
-  localStorage.getItem(String(key)) || defaultValue;
-const saveToStorage = (key: LocalStorageKey, value: unknown) =>
-  localStorage.setItem(String(key), String(value));
 
 const TabataTimer = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -69,23 +59,39 @@ const TabataTimer = () => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
+  useLocalStorage({
+    setValue: setTheme,
+    key: LocalStorageKey.theme,
+    value: theme,
+  });
+  useLocalStorage({
+    setValue: setFontSize,
+    key: LocalStorageKey.fontSize,
+    value: fontSize,
+    type: 'number',
+  });
+  useLocalStorage({
+    setValue: setWorkTime,
+    key: LocalStorageKey.workTime,
+    value: workTime,
+    type: 'number',
+  });
+  useLocalStorage({
+    setValue: setRestTime,
+    key: LocalStorageKey.restTime,
+    value: restTime,
+    type: 'number',
+  });
+  useLocalStorage({
+    setValue: setRounds,
+    key: LocalStorageKey.rounds,
+    value: rounds,
+    type: 'number',
+  });
+
   useEffect(() => {
-    setTheme(getFromStorage(LocalStorageKey.theme, 'light'));
-    setFontSize(Number(getFromStorage(LocalStorageKey.fontSize, 20)));
-    setWorkTime(Number(getFromStorage(LocalStorageKey.workTime, 20)));
-    setRestTime(Number(getFromStorage(LocalStorageKey.restTime, 10)));
-    setRounds(Number(getFromStorage(LocalStorageKey.rounds, 8)));
     setIsLoading(false);
   }, []);
-
-  useEffect(() => {
-    saveToStorage(LocalStorageKey.theme, theme);
-    saveToStorage(LocalStorageKey.fontSize, fontSize);
-
-    saveToStorage(LocalStorageKey.workTime, workTime);
-    saveToStorage(LocalStorageKey.restTime, restTime);
-    saveToStorage(LocalStorageKey.rounds, rounds);
-  }, [theme, fontSize, workTime, restTime, rounds]);
 
   useEffect(() => {
     if (!isRunning) return;
