@@ -1,7 +1,7 @@
 .timerContainer {
   display: grid;
   justify-content: center;
-  padding: 0 5px;
+  padding: 0 10px;
   width: max-content;
   margin: auto;
   overflow: hidden;
@@ -12,7 +12,7 @@
 
 /* Header for time remaining */
 .timerHeader {
-  font-size: 5em;
+  font-size: 4em;
   color: var(--primary-color); /* Color will be affected by global theme */
   font-weight: bold;
   text-align: center;
@@ -27,13 +27,16 @@
   grid-template-columns: 1fr auto auto auto;
   gap: 10px;
   align-items: center;
+  user-select: none;
 
   label {
+    user-select: none;
     margin-right: 1em;
   }
 }
 
 .timerInput {
+  user-select: none;
   padding: 0 5px;
   font-size: 1.2em;
   text-align: center;
@@ -42,11 +45,13 @@
 
 /* Display timer phase and time remaining */
 .timerDisplay {
-  gap: 10px;
-  place-items: center;
+  user-select: none;
+  grid-gap: 10px;
   margin: 20px 0;
-  font-size: 4em;
-  display: flex;
+  font-size: 3em;
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  place-items: center;
 
   &Icon {
     font-size: 1.5em;
