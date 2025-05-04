@@ -1,6 +1,8 @@
 'use client';
 
+import { useWakeLock } from '@/hooks';
 import {
+  faClockRotateLeft,
   faHand,
   faLightbulb,
   faMoon,
@@ -36,6 +38,8 @@ const TabataTimer = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
   const oneRound = workTime + restTime;
   const maxTime = oneRound > 0 ? oneRound * rounds - restTime : 0;
 
@@ -45,6 +49,20 @@ const TabataTimer = () => {
   );
   const isWorkPhase =
     currentRound * oneRound - currentTime - restTime <= workTime;
+  const handleReset = () => {
+    setCurrentTime(0);
+    setIsRunning(false);
+  };
+  // Format time remaining as mm:ss
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${String(minutes).padStart(2, '0')}:${String(
+      remainingSeconds
+    ).padStart(2, '0')}`;
+  };
+
+  useWakeLock(isRunning);
 
   useEffect(() => {
     // Set the 'data-theme' attribute on <html> to toggle between light and dark themes
@@ -87,8 +105,6 @@ const TabataTimer = () => {
     return () => clearInterval(interval);
   }, [maxTime, isRunning]);
 
-  const containerRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     const increaseFontSizeUntilFit = () => {
       if (!containerRef.current) return;
@@ -97,7 +113,7 @@ const TabataTimer = () => {
       const windowHeight = window.innerHeight;
 
       if (
-        container.clientWidth < windowWidth - 10 && // Container width less than 90% of window width
+        container.clientWidth < windowWidth - 10 &&
         container.clientHeight < windowHeight - 10
       ) {
         setTimeout(() => {
@@ -116,35 +132,11 @@ const TabataTimer = () => {
     };
 
     increaseFontSizeUntilFit();
-
-    // Listen for window resize event
-    const handleResize = () => {
-      increaseFontSizeUntilFit(); // Recalculate font size on window resize
-    };
-
-    increaseFontSizeUntilFit();
-    // Add event listener for window resize
-    window.addEventListener('resize', handleResize);
-
-    // Clean up event listener when the component is unmounted
+    window.addEventListener('resize', increaseFontSizeUntilFit);
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('resize', increaseFontSizeUntilFit);
     };
   }, [fontSize, containerRef.current]);
-
-  const handleReset = () => {
-    setCurrentTime(0);
-    setIsRunning(false);
-  };
-
-  // Format time remaining as mm:ss
-  const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${String(minutes).padStart(2, '0')}:${String(
-      remainingSeconds
-    ).padStart(2, '0')}`;
-  };
 
   if (isLoading) {
     return <></>;
@@ -215,7 +207,10 @@ const TabataTimer = () => {
           </span>
         </div>
 
-        <div className={styles.timerButtonContainer}>
+        <div className={styles.actionButtons}>
+          <button className={styles.iconButton} onClick={handleReset}>
+            <FontAwesomeIcon className={styles.icon} icon={faClockRotateLeft} />
+          </button>
           <button
             className={styles.iconButton}
             onClick={() => setIsRunning(!isRunning)}
@@ -225,9 +220,6 @@ const TabataTimer = () => {
               icon={isRunning ? faPause : faPlay}
               color="grey"
             />
-          </button>
-          <button className={styles.timerButton} onClick={handleReset}>
-            Reset
           </button>
           <button
             className={styles.iconButton}

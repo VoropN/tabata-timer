@@ -83,37 +83,6 @@
   display: flex;
 }
 
-/* Button container */
-.timerButtonContainer {
-  margin-top: 10px;
-  gap: 20px;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  overflow: hidden;
-}
-
-.timerButton,
-.iconButton {
-  justify-content: center;
-  align-items: center;
-  padding: 10px 20px;
-  font-size: 1.2em;
-  background-color: var(
-    --button-color
-  ); /* Color will be affected by global theme */
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-  display: flex;
-
-  &:hover {
-    background-color: var(
-      --button-hover-color
-    ); /* Hover color will be affected by global theme */
-  }
-}
-
 .theme {
   color: var(--button-color);
   font-size: 1.5em;
@@ -132,28 +101,42 @@
   }
 }
 
-.iconButton {
-  background-color: transparent;
-  padding: 0;
-  border-radius: 50%;
-  border: 1px solid var(--button-color);
-  width: 2em;
-  height: 2em;
-  font-size: 1.8em;
+/* Button container */
+.actionButtons {
+  margin-top: 10px;
+  gap: 20px;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  overflow: hidden;
 
-  .play {
-    transform: translateX(0.1em);
-  }
-
-  .icon {
-    color: var(--button-color);
-  }
-
-  &:hover {
+  .iconButton {
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+    cursor: pointer;
+    display: flex;
     background-color: transparent;
+    padding: 0;
+    border-radius: 50%;
+    border: 1px solid var(--button-color);
+    width: 2em;
+    height: 2em;
+    font-size: 1.8em;
+
+    .play {
+      transform: translateX(0.1em);
+    }
 
     .icon {
-      color: var(--button-hover-color);
+      color: var(--button-color);
+    }
+
+    &:hover {
+      background-color: transparent;
+
+      .icon {
+        color: var(--button-hover-color);
+      }
     }
   }
 }
