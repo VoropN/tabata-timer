@@ -1,4 +1,3 @@
-'use client';
 import { useEffect, useState } from 'react';
 
 export const useMaxFitFontSizeToWindow = (container: HTMLElement | null) => {
@@ -6,16 +5,23 @@ export const useMaxFitFontSizeToWindow = (container: HTMLElement | null) => {
 
   useEffect(() => {
     if (!container) return;
+    const isFit = () =>
+      container.scrollWidth >= window.innerWidth ||
+      container.scrollHeight >= window.innerHeight;
+
     const resizeFont = () => {
-      let size = 1000;
+      let size = Math.floor(
+        parseFloat(container.style.fontSize) *
+          Math.min(
+            container.scrollWidth / window.innerWidth,
+            container.scrollHeight / window.innerHeight
+          ) *
+          10
+      );
       container.style.fontSize = `${size}px`;
 
-      const fits = () =>
-        container.scrollWidth <= window.innerWidth &&
-        container.scrollHeight <= window.innerHeight;
-
-      while (!fits() && size > 0) {
-        size -= 1;
+      while (isFit() && size > 10) {
+        size -= 0.5;
         container.style.fontSize = `${size}px`;
       }
 
