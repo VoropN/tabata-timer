@@ -199,7 +199,7 @@ const TabataTimer = () => {
             })}
             icon={isWorkPhase ? faRunning : faHand}
           />
-          <span>
+          <span className={styles.workTime}>
             {formatTime(
               isWorkPhase
                 ? Math.max(workTime - (currentTime % oneRound), 0) // Work phase remaining time
