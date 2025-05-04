@@ -1,4 +1,3 @@
-import TabataTimer from '@/components/TabataTimer';
 import Document, { Head, Html, Main, NextScript } from 'next/document';
 
 class MyDocument extends Document {
