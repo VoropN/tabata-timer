@@ -80,24 +80,6 @@
   display: flex;
 }
 
-.theme {
-  color: var(--button-color);
-  font-size: 1.5em;
-
-  &Button {
-    background-color: transparent;
-    border: 1px solid var(--button-color);
-
-    &:hover {
-      background-color: transparent;
-
-      .theme {
-        color: var(--button-hover-color);
-      }
-    }
-  }
-}
-
 /* Button container */
 .actionButtons {
   margin-top: 10px;
@@ -116,7 +98,7 @@
     background-color: transparent;
     padding: 0;
     border-radius: 50%;
-    border: 1px solid var(--button-color);
+    border: 2px solid var(--button-color);
     width: 2em;
     height: 2em;
     font-size: 1.8em;

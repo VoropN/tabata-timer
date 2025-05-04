@@ -9,6 +9,7 @@ import {
   faHand,
   faLightbulb,
   faMoon,
+  faPause,
   faPlay,
   faRunning,
 } from '@fortawesome/free-solid-svg-icons';
@@ -16,7 +17,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import ChangeSize from '../ChangeSize';
-import StopButton from '../StopButton';
+import StopButton from '../Timer';
 import styles from './TabataTimer.module.scss';
 
 const TabataTimer = () => {
@@ -188,7 +189,9 @@ const TabataTimer = () => {
             onClick={() => setIsRunning(!isRunning)}
           >
             {isRunning ? (
-              <StopButton time={maxTime} currentTime={currentTime} />
+              <StopButton time={maxTime} currentTime={currentTime}>
+                <FontAwesomeIcon className={styles.icon} icon={faPause} />
+              </StopButton>
             ) : (
               <FontAwesomeIcon
                 className={clsx(styles.icon, styles.stop)}
