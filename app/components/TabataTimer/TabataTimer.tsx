@@ -1,9 +1,9 @@
 'use client';
 
-import { SIGNAL_MELODIES, useMusicSignals, useWakeLock } from '@/hooks';
-import { LocalStorageKey, useLocalStorage } from '@/hooks/useLocalStorage';
+import { SIGNAL_MELODIES, useMusicSignals, useWakeLock } from '@/app/hooks';
+import { LocalStorageKey, useLocalStorage } from '@/app/hooks/useLocalStorage';
 
-import { useMaxFitFontSizeToWindow } from '@/hooks/useResize';
+import { useMaxFitFontSizeToWindow } from '@/app/hooks/useResize';
 import {
   faClockRotateLeft,
   faHand,
@@ -93,6 +93,7 @@ const TabataTimer = () => {
   }, []);
 
   useEffect(() => {
+    if (isLoading) return;
     playSignal(SIGNAL_MELODIES.change);
   }, [isWorkPhase]);
 
@@ -104,9 +105,7 @@ const TabataTimer = () => {
         const next = prev + 1;
         if (next >= maxTime) {
           clearInterval(interval);
-          setCurrentTime(0);
-          setIsRunning(false);
-          playSignal(SIGNAL_MELODIES.stop);
+          handleReset();
           return 0;
         }
         return prev + 1;
@@ -127,6 +126,9 @@ const TabataTimer = () => {
         style={{ fontSize }}
         className={styles.timerContainer}
       >
+        {/* <button className={styles.iconButton} onClick={() => toggleMute()}>
+          <FontAwesomeIcon className={clsx(styles.icon)} icon={faMusic} />
+        </button> */}
         <div className={styles.timerHeader}>
           {formatTime(maxTime - currentTime)}
         </div>

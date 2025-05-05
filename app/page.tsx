@@ -1,6 +1,6 @@
 // pages/index.tsx
-import TabataTimer from '@/components/TabataTimer';
 import Head from 'next/head';
+import TabataTimer from './components/TabataTimer';
 
 export default function Home() {
   return (
