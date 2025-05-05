@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import * as Tone from 'tone';
+import { getContext } from 'tone';
 
 export function useMusicSignals() {
   const synthRef = useRef<Tone.PolySynth | null>(null);
@@ -22,9 +23,23 @@ export function useMusicSignals() {
     };
   }, []);
 
-  const playSignal = (notes: string[], duration = '16n', spacing = 0.1) => {
+  const ensureAudioContext = async () => {
+    const context = getContext();
+    if (context.state !== 'running') {
+      console.log('Resuming suspended AudioContext...');
+      await context.resume();
+    }
+  };
+
+  const playSignal = async (
+    notes: string[],
+    duration = '16n',
+    spacing = 0.1
+  ) => {
     const synth = synthRef.current;
     if (!synth) return;
+
+    await ensureAudioContext();
 
     const now = Tone.now();
     notes.forEach((note, i) => {

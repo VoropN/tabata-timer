@@ -30,24 +30,39 @@ body {
 
 /* globals.css */
 
-/* Default light theme (applies globally) */
+/* Light theme (default) */
 :root {
-  --primary-color: #4CAF50;
-  --secondary-color: #ff5722;
-  --background-color: #ffffff;
-  --text-color: #333333;
-  --button-color: #4CAF50;
-  --button-hover-color: #45a049;
+  --primary-color: #4CAF50;        /* Green */
+  --secondary-color: #ff5722;      /* Orange */
+  --background-color: #ffffff;     /* White */
+  --text-color: #333333;           /* Dark gray */
+  --button-color: #4CAF50;         /* Green button */
+  --button-hover-color: #45a049;   /* Darker green on hover */
+  --btn-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Light shadow */
+  --btn-shadow-1: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for light mode */
+  --btn-shadow-2: 0 6px 12px rgba(0, 0, 0, 0.15); /* Medium shadow */
+  --btn-shadow-3: 0 8px 16px rgba(0, 0, 0, 0.2); /* Deeper shadow for more elevation */
+  --btn-shadow-4: 0 10px 20px rgba(0, 0, 0, 0.25); /* Stronger shadow for prominent buttons */
+  --btn-shadow-5: 0 12px 24px rgba(0, 0, 0, 0.3); /* Bold shadow for floating effects */
+  --btn-shadow-glow: 0 0 15px rgba(76, 175, 80, 0.3); /* Soft green glow */
 }
 
 /* Dark theme (applies when data-theme="dark") */
 [data-theme="dark"] {
-  --primary-color: #ff5722;  /* Orange */
-  --secondary-color: #4CAF50;
-  --background-color: #333333;
-  --text-color: #ffffff;
-  --button-color: #ff5722;
-  --button-hover-color: #e64a19;
+  --primary-color: #ff5722;        /* Orange */
+  --secondary-color: #4CAF50;      /* Green */
+  --background-color: #333333;     /* Dark gray */
+  --text-color: #ffffff;           /* White text */
+  --button-color: #ff5722;         /* Orange button */
+  --button-hover-color: #e64a19;   /* Darker orange on hover */
+  --btn-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);  /* Softer, subtler shadow for dark mode */
+  --btn-shadow-1: 0 4px 8px rgba(0, 0, 0, 0.3);  /* Soft shadow for dark mode */
+  --btn-shadow-2: 0 6px 12px rgba(0, 0, 0, 0.4); /* Medium shadow */
+  --btn-shadow-3: 0 8px 16px rgba(0, 0, 0, 0.5); /* Deeper shadow */
+  --btn-shadow-4: 0 10px 20px rgba(0, 0, 0, 0.6); /* Stronger shadow */
+  --btn-shadow-5: 0 12px 24px rgba(0, 0, 0, 0.7); /* Bold shadow for floating effects */
+  --btn-shadow-glow: 0 0 20px rgba(0, 255, 255, 0.4),
+  0 0 30px rgba(0, 255, 255, 0.6);
 }
 
 /* Ensure background and text color is updated for dark theme */
