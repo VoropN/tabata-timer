@@ -1,6 +1,6 @@
 'use client';
 
-import { useWakeLock } from '@/hooks';
+import { SIGNAL_MELODIES, useMusicSignals, useWakeLock } from '@/hooks';
 import { LocalStorageKey, useLocalStorage } from '@/hooks/useLocalStorage';
 
 import { useMaxFitFontSizeToWindow } from '@/hooks/useResize';
@@ -31,6 +31,7 @@ const TabataTimer = () => {
   const [container, setContainer] = useState<HTMLElement | null>(null);
 
   const fontSize = useMaxFitFontSizeToWindow(container);
+  const { playSignal } = useMusicSignals();
 
   const oneRound = workTime + restTime;
   const maxTime = oneRound > 0 ? oneRound * rounds - restTime : 0;
@@ -41,9 +42,11 @@ const TabataTimer = () => {
   );
   const isWorkPhase =
     currentRound * oneRound - currentTime - restTime <= workTime;
+
   const handleReset = () => {
     setCurrentTime(0);
     setIsRunning(false);
+    playSignal(SIGNAL_MELODIES.stop);
   };
   // Format time remaining as mm:ss
   const formatTime = (seconds: number) => {
@@ -90,6 +93,10 @@ const TabataTimer = () => {
   }, []);
 
   useEffect(() => {
+    playSignal(SIGNAL_MELODIES.change);
+  }, [isWorkPhase]);
+
+  useEffect(() => {
     if (!isRunning) return;
 
     const interval = setInterval(() => {
@@ -99,6 +106,8 @@ const TabataTimer = () => {
           clearInterval(interval);
           setCurrentTime(0);
           setIsRunning(false);
+          playSignal(SIGNAL_MELODIES.stop);
+          return 0;
         }
         return prev + 1;
       });
@@ -186,7 +195,10 @@ const TabataTimer = () => {
           </button>
           <button
             className={styles.iconButton}
-            onClick={() => setIsRunning(!isRunning)}
+            onClick={() => {
+              setIsRunning(!isRunning);
+              playSignal(SIGNAL_MELODIES.start);
+            }}
           >
             {isRunning ? (
               <StopButton time={maxTime} currentTime={currentTime}>
