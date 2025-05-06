@@ -92,9 +92,9 @@ const TabataTimer = () => {
   });
 
   useEffect(() => {
-    if (!isLoading) return;
+    if (isLoading) return;
     playSignal(SIGNAL_MELODIES.change);
-  }, [isWorkPhase, isLoading]);
+  }, [isWorkPhase]);
 
   useEffect(() => {
     if (!isRunning) return;
