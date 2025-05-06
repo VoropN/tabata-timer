@@ -6,15 +6,16 @@ type UseLocalStorage<T> = {
   setValue: Dispatch<SetStateAction<any>>;
   value: T;
   key: LocalStorageKey;
-  type?: 'number' | 'string';
+  type?: 'number' | 'string' | 'boolean';
 };
 
 export enum LocalStorageKey {
-  theme,
-  fontSize,
-  workTime,
-  restTime,
-  rounds,
+  theme = 'theme',
+  fontSize = 'fontSize',
+  workTime = 'workTime',
+  restTime = 'restTime',
+  rounds = 'rounds',
+  isMuted = 'isMuted',
 }
 
 export const useLocalStorage = <T>({
@@ -25,7 +26,13 @@ export const useLocalStorage = <T>({
 }: UseLocalStorage<T>) => {
   useEffect(() => {
     const storedValue = getFromStorage(key, value);
-    setValue(type === 'number' ? Number(storedValue) : storedValue);
+    if (type === 'boolean') {
+      setValue(JSON.parse(storedValue));
+    } else if (type === 'number') {
+      setValue(Number(storedValue));
+    } else {
+      setValue(storedValue);
+    }
   }, []);
 
   useEffect(() => {

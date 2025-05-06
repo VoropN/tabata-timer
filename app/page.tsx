@@ -1,6 +1,7 @@
-// pages/index.tsx
+import TabataTimer from '@/app/components/TabataTimer';
+import { SoundProvider } from '@/app/contexts';
 import Head from 'next/head';
-import TabataTimer from './components/TabataTimer';
+import VolumeControl from './components/VolumeControl/VolumeControl';
 
 export default function Home() {
   return (
@@ -16,7 +17,10 @@ export default function Home() {
         />
       </Head>
       <main>
-        <TabataTimer />
+        <SoundProvider>
+          <VolumeControl />
+          <TabataTimer />
+        </SoundProvider>
       </main>
     </div>
   );

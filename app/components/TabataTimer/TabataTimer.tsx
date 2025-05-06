@@ -1,8 +1,10 @@
 'use client';
 
-import { SIGNAL_MELODIES, useMusicSignals, useWakeLock } from '@/app/hooks';
+import { SIGNAL_MELODIES, useWakeLock } from '@/app/hooks';
 import { LocalStorageKey, useLocalStorage } from '@/app/hooks/useLocalStorage';
 
+import { useSound } from '@/app/contexts';
+import { useLoading } from '@/app/hooks/useLoading';
 import { useMaxFitFontSizeToWindow } from '@/app/hooks/useResize';
 import {
   faClockRotateLeft,
@@ -16,12 +18,12 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
+import Button from '../Button/Button';
 import ChangeSize from '../ChangeSize';
 import StopButton from '../Timer';
 import styles from './TabataTimer.module.scss';
 
 const TabataTimer = () => {
-  const [isLoading, setIsLoading] = useState(true);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [workTime, setWorkTime] = useState<number>(20); // sensible defaults
   const [restTime, setRestTime] = useState<number>(10);
@@ -29,9 +31,10 @@ const TabataTimer = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [container, setContainer] = useState<HTMLElement | null>(null);
+  const { playSignal } = useSound();
+  const { isLoading } = useLoading();
 
   const fontSize = useMaxFitFontSizeToWindow(container);
-  const { playSignal } = useMusicSignals();
 
   const oneRound = workTime + restTime;
   const maxTime = oneRound > 0 ? oneRound * rounds - restTime : 0;
@@ -89,13 +92,9 @@ const TabataTimer = () => {
   });
 
   useEffect(() => {
-    setIsLoading(false);
-  }, []);
-
-  useEffect(() => {
-    if (isLoading) return;
+    if (!isRunning) return;
     playSignal(SIGNAL_MELODIES.change);
-  }, [isWorkPhase]);
+  }, [isWorkPhase, isRunning]);
 
   useEffect(() => {
     if (!isRunning) return;
@@ -115,9 +114,7 @@ const TabataTimer = () => {
     return () => clearInterval(interval);
   }, [maxTime, isRunning]);
 
-  if (isLoading) {
-    return <></>;
-  }
+  if (isLoading) return <></>;
 
   return (
     <>
@@ -126,9 +123,6 @@ const TabataTimer = () => {
         style={{ fontSize }}
         className={styles.timerContainer}
       >
-        {/* <button className={styles.iconButton} onClick={() => toggleMute()}>
-          <FontAwesomeIcon className={clsx(styles.icon)} icon={faMusic} />
-        </button> */}
         <div className={styles.timerHeader}>
           {formatTime(maxTime - currentTime)}
         </div>
@@ -192,10 +186,9 @@ const TabataTimer = () => {
         </div>
 
         <div className={styles.actionButtons}>
-          <button className={styles.iconButton} onClick={handleReset}>
-            <FontAwesomeIcon className={styles.icon} icon={faClockRotateLeft} />
-          </button>
-          <button
+          <Button onClick={handleReset} icon={faClockRotateLeft} />
+          <Button
+            type="icon"
             className={styles.iconButton}
             onClick={() => {
               setIsRunning(!isRunning);
@@ -212,17 +205,11 @@ const TabataTimer = () => {
                 icon={faPlay}
               />
             )}
-          </button>
-          <button
-            className={styles.iconButton}
+          </Button>
+          <Button
             onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-          >
-            <FontAwesomeIcon
-              className={clsx(styles.icon)}
-              icon={theme === 'light' ? faLightbulb : faMoon}
-              color="grey"
-            />
-          </button>
+            icon={theme === 'light' ? faLightbulb : faMoon}
+          />
         </div>
       </div>
     </>

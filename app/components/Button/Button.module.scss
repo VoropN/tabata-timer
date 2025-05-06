@@ -1,0 +1,27 @@
+.iconButton {
+  justify-content: center;
+  align-items: center;
+  padding: 10px 20px;
+  cursor: pointer;
+  display: flex;
+  background-color: transparent;
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid var(--button-color);
+  width: 2em;
+  height: 2em;
+  font-size: 1.8em;
+  box-shadow: var(--btn-shadow);
+
+  .icon {
+    color: var(--button-color);
+  }
+
+  &:hover {
+    background-color: transparent;
+
+    .icon {
+      color: var(--button-hover-color);
+    }
+  }
+}
