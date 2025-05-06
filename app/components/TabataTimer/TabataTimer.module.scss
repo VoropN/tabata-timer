@@ -21,6 +21,13 @@
   display: flex;
   justify-content: center;
   width: 100%;
+  // transition: all 0.3s;
+
+  &.isRunning {
+    font-size: 2em;
+    color: var(--secondary-color);
+    font-weight: 100;
+  }
 }
 
 /* Input fields and labels */
@@ -42,10 +49,6 @@
   min-width: 2em;
 }
 
-.workTime {
-  min-width: 3em;
-}
-
 /* Display timer phase and time remaining */
 .timerDisplay {
   grid-gap: 10px;
@@ -62,6 +65,15 @@
   .stop {
     transform: scaleX(-1);
     color: var(--secondary-color);
+  }
+}
+
+.workTime {
+  min-width: 3em;
+
+  &.isRunning {
+    font-size: 1.2em;
+    color: var(--primary-color);
   }
 }
 
