@@ -21,13 +21,6 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  // transition: all 0.3s;
-
-  &.isRunning {
-    font-size: 2em;
-    color: var(--secondary-color);
-    font-weight: 100;
-  }
 }
 
 /* Input fields and labels */
@@ -70,10 +63,21 @@
 
 .workTime {
   min-width: 3em;
+}
 
-  &.isRunning {
-    font-size: 1.2em;
+.isRunning {
+  .workTime {
     color: var(--primary-color);
+  }
+
+  .timerHeader {
+    font-size: 2em;
+    color: var(--secondary-color);
+    font-weight: 100;
+  }
+
+  .timerControls {
+    visibility: hidden;
   }
 }
 
@@ -89,12 +93,12 @@
   justify-content: space-around;
   align-items: center;
   display: flex;
+  padding-bottom: 5px;
 }
 
 /* Button container */
 .actionButtons {
   padding-top: 10px;
-  padding-bottom: 5px;
   gap: 20px;
   display: grid;
   grid-template-columns: auto auto auto;

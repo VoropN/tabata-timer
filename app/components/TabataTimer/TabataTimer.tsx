@@ -121,48 +121,10 @@ const TabataTimer = () => {
       <div
         ref={(ref) => setContainer(ref)}
         style={{ fontSize }}
-        className={styles.timerContainer}
+        className={clsx(styles.timerContainer, {
+          [styles.isRunning]: isRunning,
+        })}
       >
-        <div
-          className={clsx(styles.timerHeader, {
-            [styles.isRunning]: isRunning,
-          })}
-        >
-          {formatTime(maxTime - currentTime)}
-        </div>
-
-        {!isRunning && (
-          <div className={clsx(styles.timerControls)}>
-            <label>Work Time (sec): </label>
-            <ChangeSize
-              increaseSize={() => setWorkTime((prev) => prev + 1)}
-              decreaseSize={() =>
-                setWorkTime((prev) => (prev > 1 ? prev - 1 : 1))
-              }
-            >
-              <span className={styles.timerInput}>{workTime}</span>
-            </ChangeSize>
-            <label>Rest Time (sec): </label>
-            <ChangeSize
-              increaseSize={() => setRestTime((prev) => prev + 1)}
-              decreaseSize={() =>
-                setRestTime((prev) => (prev > 0 ? prev - 1 : 0))
-              }
-            >
-              <span className={styles.timerInput}>{restTime}</span>
-            </ChangeSize>
-            <label>Rounds: </label>
-            <ChangeSize
-              increaseSize={() => setRounds((prev) => prev + 1)}
-              decreaseSize={() =>
-                setRounds((prev) => (prev > 1 ? prev - 1 : 1))
-              }
-            >
-              <span className={styles.timerInput}>{rounds}</span>
-            </ChangeSize>
-          </div>
-        )}
-
         <div className={styles.phaseName}>
           {isWorkPhase ? <>Work Phase</> : <>Rest Phase</>}
         </div>
@@ -177,9 +139,7 @@ const TabataTimer = () => {
           ) : (
             <span />
           )}
-          <span
-            className={clsx(styles.workTime, { [styles.isRunning]: isRunning })}
-          >
+          <span className={styles.workTime}>
             {formatTime(
               isWorkPhase
                 ? Math.max(workTime - (currentTime % oneRound), 0) // Work phase remaining time
@@ -187,12 +147,39 @@ const TabataTimer = () => {
             )}
           </span>
         </div>
-
         <div className={styles.roundStatus}>
           <span>Round: </span>
           <span className={styles.roundStatusNumber}>
             {currentRound}/{rounds}
           </span>
+        </div>
+
+        <div className={clsx(styles.timerControls)}>
+          <label>Work Time (sec): </label>
+          <ChangeSize
+            increaseSize={() => setWorkTime((prev) => prev + 1)}
+            decreaseSize={() =>
+              setWorkTime((prev) => (prev > 1 ? prev - 1 : 1))
+            }
+          >
+            <span className={styles.timerInput}>{workTime}</span>
+          </ChangeSize>
+          <label>Rest Time (sec): </label>
+          <ChangeSize
+            increaseSize={() => setRestTime((prev) => prev + 1)}
+            decreaseSize={() =>
+              setRestTime((prev) => (prev > 0 ? prev - 1 : 0))
+            }
+          >
+            <span className={styles.timerInput}>{restTime}</span>
+          </ChangeSize>
+          <label>Rounds: </label>
+          <ChangeSize
+            increaseSize={() => setRounds((prev) => prev + 1)}
+            decreaseSize={() => setRounds((prev) => (prev > 1 ? prev - 1 : 1))}
+          >
+            <span className={styles.timerInput}>{rounds}</span>
+          </ChangeSize>
         </div>
 
         <div className={styles.actionButtons}>
@@ -220,6 +207,9 @@ const TabataTimer = () => {
             onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
             icon={theme === 'light' ? faLightbulb : faMoon}
           />
+        </div>
+        <div className={styles.timerHeader}>
+          {formatTime(maxTime - currentTime)}
         </div>
       </div>
     </>
