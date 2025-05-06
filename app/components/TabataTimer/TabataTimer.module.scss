@@ -46,9 +46,8 @@
 .timerDisplay {
   grid-gap: 10px;
   margin: 20px 0;
-  font-size: 3em;
+  font-size: 4em;
   display: grid;
-  grid-template-columns: 2fr 3fr;
   place-items: center;
 
   &Icon {
@@ -58,26 +57,6 @@
   .stop {
     transform: scaleX(-1);
     color: var(--secondary-color);
-  }
-}
-
-.workTime {
-  min-width: 3em;
-}
-
-.isRunning {
-  .workTime {
-    color: var(--primary-color);
-  }
-
-  .timerHeader {
-    font-size: 2em;
-    color: var(--secondary-color);
-    font-weight: 100;
-  }
-
-  .timerControls {
-    visibility: hidden;
   }
 }
 
@@ -120,5 +99,51 @@
         color: var(--button-hover-color);
       }
     }
+  }
+}
+
+.timerDisplayIcon {
+  visibility: hidden;
+  color: var(--primary-color);
+}
+
+.workTime {
+  line-height: 0.8;
+}
+
+.isRunning {
+  .workTime {
+    color: transparent;
+    background: linear-gradient(
+      to top,
+      var(--secondary-color) 0%,
+      var(--secondary-color) var(--progress),
+      lightgray var(--progress)
+    );
+    background-clip: text;
+
+    &.isWorkPhase {
+      background: linear-gradient(
+        to top,
+        var(--primary-color) 0%,
+        var(--primary-color) var(--progress),
+        lightgray var(--progress)
+      );
+      background-clip: text;
+    }
+  }
+
+  .timerHeader {
+    font-size: 2em;
+    color: var(--secondary-color);
+    font-weight: 100;
+  }
+
+  .timerDisplayIcon {
+    visibility: hidden;
+  }
+
+  .timerDisplayIcon {
+    visibility: visible;
   }
 }

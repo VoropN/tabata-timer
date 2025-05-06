@@ -45,6 +45,11 @@ const TabataTimer = () => {
   );
   const isWorkPhase =
     currentRound * oneRound - currentTime - restTime <= workTime;
+  const roundTime = isWorkPhase
+    ? Math.max(workTime - (currentTime % oneRound), 0) // Work phase remaining time
+    : Math.max(restTime - ((currentTime % oneRound) - workTime), 0);
+  const roundTimeProgress =
+    (roundTime / (isWorkPhase ? workTime : restTime)) * 100;
 
   const handleReset = () => {
     setCurrentTime(0);
@@ -120,7 +125,7 @@ const TabataTimer = () => {
     <>
       <div
         ref={(ref) => setContainer(ref)}
-        style={{ fontSize }}
+        style={{ fontSize, ['--progress' as any]: `${roundTimeProgress}%` }}
         className={clsx(styles.timerContainer, {
           [styles.isRunning]: isRunning,
         })}
@@ -129,17 +134,17 @@ const TabataTimer = () => {
           {isWorkPhase ? <>Work Phase</> : <>Rest Phase</>}
         </div>
         <div className={styles.timerDisplay}>
-          {isRunning ? (
-            <FontAwesomeIcon
-              className={clsx(styles.timerDisplayIcon, {
-                [styles.stop]: !isWorkPhase,
-              })}
-              icon={isWorkPhase ? faRunning : faHand}
-            />
-          ) : (
-            <span />
-          )}
-          <span className={styles.workTime}>
+          <FontAwesomeIcon
+            className={clsx(styles.timerDisplayIcon, {
+              [styles.stop]: !isWorkPhase,
+            })}
+            icon={isWorkPhase ? faRunning : faHand}
+          />
+          <span
+            className={clsx(styles.workTime, {
+              [styles.isWorkPhase]: isWorkPhase,
+            })}
+          >
             {formatTime(
               isWorkPhase
                 ? Math.max(workTime - (currentTime % oneRound), 0) // Work phase remaining time
