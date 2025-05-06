@@ -39,6 +39,7 @@
   font-size: 1.2em;
   text-align: center;
   min-width: 2em;
+  color: var(--secondary-color);
 }
 
 /* Display timer phase and time remaining */
@@ -109,7 +110,6 @@
 .workTime {
   line-height: 0.8;
   color: var(--primary-color);
-  filter: drop-shadow(0px 0px 2px black);
 }
 
 .isRunning {
@@ -139,7 +139,8 @@
     color: var(--secondary-color);
   }
 
-  .timerDisplayIcon {
+  .timerDisplayIcon,
+  .timerControls {
     visibility: hidden;
   }
 
