@@ -36,6 +36,7 @@ body {
   --secondary-color: #ff5722;      /* Orange */
   --background-color: #ffffff;     /* White */
   --text-color: #333333;           /* Dark gray */
+
   --button-color: #4CAF50;         /* Green button */
   --button-hover-color: #45a049;   /* Darker green on hover */
   --btn-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Light shadow */
@@ -69,6 +70,5 @@ body {
 body {
   background-color: var(--background-color);
   color: var(--text-color);
-  filter: drop-shadow(0px 0px 2px grey);
 }
 

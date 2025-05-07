@@ -13,13 +13,14 @@
 }
 
 /* Header for time remaining */
-.timerHeader {
+.fullTime {
   font-size: 4em;
   color: var(--secondary-color); /* Color will be affected by global theme */
   text-align: center;
   display: flex;
   justify-content: center;
   width: 100%;
+  line-height: 1;
 }
 
 /* Input fields and labels */
@@ -34,7 +35,7 @@
   }
 }
 
-.timerInput {
+.timeControl {
   padding: 0 5px;
   font-size: 1.2em;
   text-align: center;
@@ -72,12 +73,11 @@
   justify-content: space-around;
   align-items: center;
   display: flex;
-  padding-bottom: 5px;
 }
 
 /* Button container */
 .actionButtons {
-  padding-top: 10px;
+  padding: 10px 0;
   gap: 20px;
   display: grid;
   grid-template-columns: auto auto auto;
@@ -110,6 +110,7 @@
 .workTime {
   line-height: 0.8;
   color: var(--primary-color);
+  filter: drop-shadow(0px 0px 2px grey);
 }
 
 .isRunning {
@@ -134,7 +135,7 @@
     }
   }
 
-  .timerHeader {
+  .fullTime {
     font-size: 2em;
     color: var(--secondary-color);
   }

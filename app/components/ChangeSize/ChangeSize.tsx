@@ -1,6 +1,6 @@
 'use client';
 
-import { faCircleMinus, faCirclePlus } from '@fortawesome/free-solid-svg-icons';
+import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRef } from 'react';
 import styles from './ChangeSize.module.scss';
@@ -36,7 +36,7 @@ const ChangeSize: React.FC<ChangeSizeProps> = ({
         onTouchEnd={timeoutClear}
         onTouchCancel={timeoutClear}
       >
-        <FontAwesomeIcon icon={faCircleMinus} size="lg" />
+        <FontAwesomeIcon icon={faMinus} />
       </button>
       {children}
       <button
@@ -48,7 +48,7 @@ const ChangeSize: React.FC<ChangeSizeProps> = ({
         onTouchEnd={timeoutClear}
         onTouchCancel={timeoutClear}
       >
-        <FontAwesomeIcon icon={faCirclePlus} size="lg" />
+        <FontAwesomeIcon icon={faPlus} />
       </button>
     </>
   );

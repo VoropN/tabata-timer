@@ -167,7 +167,7 @@ const TabataTimer = () => {
               setWorkTime((prev) => (prev > 1 ? prev - 1 : 1))
             }
           >
-            <span className={styles.timerInput}>{workTime}</span>
+            <span className={styles.timeControl}>{workTime}</span>
           </ChangeSize>
           <label>Rest Time (sec): </label>
           <ChangeSize
@@ -176,17 +176,16 @@ const TabataTimer = () => {
               setRestTime((prev) => (prev > 0 ? prev - 1 : 0))
             }
           >
-            <span className={styles.timerInput}>{restTime}</span>
+            <span className={styles.timeControl}>{restTime}</span>
           </ChangeSize>
           <label>Rounds: </label>
           <ChangeSize
             increaseSize={() => setRounds((prev) => prev + 1)}
             decreaseSize={() => setRounds((prev) => (prev > 1 ? prev - 1 : 1))}
           >
-            <span className={styles.timerInput}>{rounds}</span>
+            <span className={styles.timeControl}>{rounds}</span>
           </ChangeSize>
         </div>
-
         <div className={styles.actionButtons}>
           <Button onClick={handleReset} icon={faClockRotateLeft} />
           <Button
@@ -213,7 +212,8 @@ const TabataTimer = () => {
             icon={theme === 'light' ? faLightbulb : faMoon}
           />
         </div>
-        <div className={styles.timerHeader}>
+
+        <div className={styles.fullTime}>
           {formatTime(maxTime - currentTime)}
         </div>
       </div>
