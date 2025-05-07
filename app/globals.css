@@ -27,12 +27,12 @@ body {
 
 /* Light theme (default) */
 :root {
-  --primary-color: #ff5722;        /* Orange */
-  --secondary-color: #4CAF50;      /* Green */
+  --primary-color: #4CAF50;        /* Green */
+  --secondary-color: #ff5722;      /* Orange */
   --background-color: #ededed;    /* White */
   --text-color: #333333;           /* Dark gray */
-  --button-color: #ff5722;         /* Orange button */
-  --button-hover-color: #e64a19;  
+  --button-color: #4CAF50;         /* Green button */
+  --button-hover-color: #45a049;   /* Darker green on hover */
   --btn-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Light shadow */
   --btn-shadow-1: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for light mode */
   --btn-shadow-2: 0 6px 12px rgba(0, 0, 0, 0.15); /* Medium shadow */
