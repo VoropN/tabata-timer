@@ -26,6 +26,7 @@
 /* Input fields and labels */
 .timerControls {
   display: grid;
+  padding-top: 10px;
   grid-template-columns: 1fr auto auto auto;
   gap: 10px;
   align-items: center;
@@ -50,6 +51,7 @@
   font-size: 4em;
   display: grid;
   place-items: center;
+  position: relative;
 
   &Icon {
     font-size: 1.5em;
@@ -57,7 +59,6 @@
 
   .stop {
     transform: scaleX(-1);
-    color: var(--secondary-color);
   }
 }
 
@@ -103,14 +104,24 @@
 }
 
 .timerDisplayIcon {
+  color: lightgray;
   visibility: hidden;
-  color: var(--primary-color);
+  clip-path: inset(0 0 var(--progress) 0); /* Shows top 75% of the icon */
+  transition: clip-path 0.3s ease;
+  filter: drop-shadow(1px 1px 1px gray);
+
+  &.mask {
+    color: var(--secondary-color);
+    clip-path: none;
+    position: absolute;
+    top: 0;
+  }
 }
 
 .workTime {
   line-height: 0.8;
   color: var(--primary-color);
-  filter: drop-shadow(0px 0px 2px grey);
+  filter: drop-shadow(1px 1px 1px gray);
 }
 
 .isRunning {
@@ -123,16 +134,6 @@
       lightgray var(--progress)
     );
     background-clip: text;
-
-    &.isWorkPhase {
-      background: linear-gradient(
-        to top,
-        var(--primary-color) 0%,
-        var(--primary-color) var(--progress),
-        lightgray var(--progress)
-      );
-      background-clip: text;
-    }
   }
 
   .fullTime {
@@ -147,5 +148,24 @@
 
   .timerDisplayIcon {
     visibility: visible;
+  }
+}
+
+.isWorkPhase {
+  .workTime {
+    background: linear-gradient(
+      to top,
+      var(--primary-color) 0%,
+      var(--primary-color) var(--progress),
+      lightgray var(--progress)
+    );
+    background-clip: text;
+  }
+
+  .timerDisplayIcon.mask {
+    color: var(--primary-color);
+    clip-path: none;
+    position: absolute;
+    top: 0;
   }
 }

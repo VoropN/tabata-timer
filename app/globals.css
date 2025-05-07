@@ -25,18 +25,12 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-
-/* globals.css */
-
-/* globals.css */
-
 /* Light theme (default) */
 :root {
   --primary-color: #4CAF50;        /* Green */
   --secondary-color: #ff5722;      /* Orange */
   --background-color: #ffffff;     /* White */
   --text-color: #333333;           /* Dark gray */
-
   --button-color: #4CAF50;         /* Green button */
   --button-hover-color: #45a049;   /* Darker green on hover */
   --btn-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Light shadow */
