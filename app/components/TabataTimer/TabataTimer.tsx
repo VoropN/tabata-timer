@@ -97,7 +97,7 @@ const TabataTimer = () => {
   });
 
   useEffect(() => {
-    if (isLoading) return;
+    if (isLoading || !isRunning) return;
     playSignal(SIGNAL_MELODIES.change);
   }, [isWorkPhase]);
 
