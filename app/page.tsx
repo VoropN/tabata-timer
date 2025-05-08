@@ -1,3 +1,4 @@
+'use client';
 import TabataTimer from '@/app/components/TabataTimer';
 import { SoundProvider } from '@/app/contexts';
 import Head from 'next/head';
