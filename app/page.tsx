@@ -10,6 +10,16 @@ export default function Home() {
       <Head>
         <title>Tabata Timer</title>
         <meta name="description" content="A simple Tabata timer for workouts" />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/icons/apple-touch-icon-180x180.png"
+        />
+        <link
+          rel="apple-touch-icon"
+          sizes="120x120"
+          href="/icons/apple-touch-icon-120x120.png"
+        />
         <link rel="icon" href="/favicon.ico" />
         <link rel="manifest" href="/manifest.json" />
         <meta
