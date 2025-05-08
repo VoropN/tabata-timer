@@ -1,0 +1,13 @@
+$offset: 15px;
+
+.volumeControl,
+.refresh {
+  position: fixed;
+  right: $offset;
+  top: 35px;
+  z-index: 1000;
+}
+
+.refresh {
+  left: $offset;
+}
