@@ -24,7 +24,7 @@ import StopButton from '../Timer';
 import styles from './TabataTimer.module.scss';
 
 const TabataTimer = () => {
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
   const [workTime, setWorkTime] = useState<number>(20); // sensible defaults
   const [restTime, setRestTime] = useState<number>(10);
   const [rounds, setRounds] = useState<number>(8);
