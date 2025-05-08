@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Tabata Timer',
+  title: 'Tabata Timer One',
   description: 'A simple Tabata timer for workouts',
   manifest: '/manifest.json',
   icons: {
