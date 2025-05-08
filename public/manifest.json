@@ -1,5 +1,5 @@
 {
-  "name": "Tabata Timer",
+  "name": "Tabata Timer One",
   "short_name": "Tabata",
   "description": "A simple and customizable Tabata timer for workouts.",
   "start_url": "/",
@@ -8,9 +8,15 @@
   "theme_color": "#333333",
   "icons": [
     {
-      "src": "/icons/apple-touch-icon-512x512.png",
-      "sizes": "512x512",
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
       "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
