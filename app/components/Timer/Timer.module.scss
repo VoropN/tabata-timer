@@ -1,3 +1,5 @@
+@use '../../styles/variables.scss' as vars;
+
 .circleTimer {
   width: 100%;
   height: 100%;
@@ -10,6 +12,6 @@
   align-items: center;
   justify-content: center;
   transition: background 0.2s linear;
-  filter: drop-shadow(0px 1px 1px black);
+  filter: vars.$filter;
   box-shadow: var(--btn-shadow-glow);
 }

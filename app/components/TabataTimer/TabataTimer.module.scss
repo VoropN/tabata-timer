@@ -1,3 +1,5 @@
+@use '../../styles/variables.scss' as vars;
+
 .timerContainer {
   display: grid;
   justify-content: center;
@@ -108,7 +110,7 @@
   visibility: hidden;
   clip-path: inset(0 0 var(--progress) 0); /* Shows top 75% of the icon */
   transition: clip-path 0.3s ease;
-  filter: drop-shadow(1px 1px 1px gray);
+  filter: vars.$filter;
 
   &.mask {
     color: var(--secondary-color);
@@ -121,7 +123,7 @@
 .workTime {
   line-height: 0.8;
   color: var(--primary-color);
-  filter: drop-shadow(1px 1px 1px gray);
+  filter: vars.$filter;
 }
 
 .isRunning {

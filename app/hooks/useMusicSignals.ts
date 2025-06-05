@@ -54,7 +54,9 @@ export function useMusicSignals() {
 
 export const SIGNAL_MELODIES = {
   start: ['C4', 'E4'],
-  change: ['G4', 'E4'],
+  change: ['C5'],
+  change2: ['G4'],
+  change3: ['E4'],
   stop: ['A3', 'F3'],
   tick: ['C5'],
   error: ['E4', 'C4'],

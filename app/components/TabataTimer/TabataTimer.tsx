@@ -64,7 +64,9 @@ const TabataTimer = () => {
       remainingSeconds
     ).padStart(2, '0')}`;
   };
-
+  const timeToShow = isWorkPhase
+    ? Math.max(workTime - (currentTime % oneRound), 0) // Work phase remaining time
+    : Math.max(restTime - ((currentTime % oneRound) - workTime), 0); // Rest phase remaining time
   useWakeLock(isRunning);
 
   useEffect(() => {
@@ -98,8 +100,14 @@ const TabataTimer = () => {
 
   useEffect(() => {
     if (isLoading || !isRunning) return;
-    playSignal(SIGNAL_MELODIES.change);
-  }, [isWorkPhase]);
+    if (timeToShow === 1) {
+      playSignal(SIGNAL_MELODIES.change);
+    } else if (timeToShow === 2) {
+      playSignal(SIGNAL_MELODIES.change2);
+    } else if (timeToShow === 3) {
+      playSignal(SIGNAL_MELODIES.change3);
+    }
+  }, [timeToShow]);
 
   useEffect(() => {
     if (!isRunning) return;
@@ -148,11 +156,7 @@ const TabataTimer = () => {
             icon={isWorkPhase ? faRunning : faHand}
           />
           <span className={clsx(styles.workTime)}>
-            {formatTime(
-              isWorkPhase
-                ? Math.max(workTime - (currentTime % oneRound), 0) // Work phase remaining time
-                : Math.max(restTime - ((currentTime % oneRound) - workTime), 0) // Rest phase remaining time
-            )}
+            {formatTime(timeToShow)}
           </span>
         </div>
         <div className={styles.roundStatus}>
