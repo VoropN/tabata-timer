@@ -22,7 +22,7 @@ const ChangeSize: React.FC<ChangeSizeProps> = ({
     timer.current = setInterval(() => {
       counter++;
       func(counter);
-    }, 50);
+    }, 100);
   };
 
   const timeoutClear = () => {
