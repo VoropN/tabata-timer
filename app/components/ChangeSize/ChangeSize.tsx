@@ -7,8 +7,8 @@ import styles from './ChangeSize.module.scss';
 
 interface ChangeSizeProps {
   children: React.ReactNode;
-  increaseSize: () => void; // Function to increase size
-  decreaseSize: () => void; // Function to decrease size
+  increaseSize: (counter: number) => void; // Function to increase size
+  decreaseSize: (counter: number) => void; // Function to decrease size
 }
 
 const ChangeSize: React.FC<ChangeSizeProps> = ({
@@ -17,8 +17,12 @@ const ChangeSize: React.FC<ChangeSizeProps> = ({
   decreaseSize,
 }) => {
   const timer = useRef<NodeJS.Timeout>(null);
-  const call = (func: () => void) => {
-    timer.current = setInterval(() => func(), 50);
+  const call = (func: (counter: number) => void) => {
+    let counter = 0;
+    timer.current = setInterval(() => {
+      counter++;
+      func(counter);
+    }, 50);
   };
 
   const timeoutClear = () => {

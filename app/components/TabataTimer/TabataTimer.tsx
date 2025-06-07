@@ -128,6 +128,9 @@ const TabataTimer = () => {
   }, [maxTime, isRunning]);
 
   if (isLoading) return <></>;
+  const increaseSize = (factor: number) => (prev: number) => prev + factor;
+  const decreaseSize = (factor: number, min: number) => (prev: number) =>
+    Math.max(prev - factor, min);
 
   return (
     <>
@@ -169,26 +172,22 @@ const TabataTimer = () => {
         <div className={clsx(styles.timerControls)}>
           <label>Work Time (sec): </label>
           <ChangeSize
-            increaseSize={() => setWorkTime((prev) => prev + 1)}
-            decreaseSize={() =>
-              setWorkTime((prev) => (prev > 1 ? prev - 1 : 1))
-            }
+            increaseSize={(factor) => setWorkTime(increaseSize(factor))}
+            decreaseSize={(factor) => setWorkTime(decreaseSize(factor, 1))}
           >
             <span className={styles.timeControl}>{workTime}</span>
           </ChangeSize>
           <label>Rest Time (sec): </label>
           <ChangeSize
-            increaseSize={() => setRestTime((prev) => prev + 1)}
-            decreaseSize={() =>
-              setRestTime((prev) => (prev > 0 ? prev - 1 : 0))
-            }
+            increaseSize={(factor) => setRestTime(increaseSize(factor))}
+            decreaseSize={(factor) => setRestTime(decreaseSize(factor, 0))}
           >
             <span className={styles.timeControl}>{restTime}</span>
           </ChangeSize>
           <label>Rounds: </label>
           <ChangeSize
-            increaseSize={() => setRounds((prev) => prev + 1)}
-            decreaseSize={() => setRounds((prev) => (prev > 1 ? prev - 1 : 1))}
+            increaseSize={(factor) => setRounds(increaseSize(factor))}
+            decreaseSize={(factor) => setRounds(decreaseSize(factor, 1))}
           >
             <span className={styles.timeControl}>{rounds}</span>
           </ChangeSize>
