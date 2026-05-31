@@ -20,13 +20,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Button from '../Button/Button';
+import PresetsSheet from '../PresetsSheet';
 import SettingStepper from '../SettingStepper';
 import StopButton from '../Timer';
 import styles from './TabataTimer.module.scss';
+import type { Preset } from '@/app/lib/presets';
 
-const CLASSIC_WORK = 20;
-const CLASSIC_REST = 10;
-const CLASSIC_ROUNDS = 8;
 
 const TabataTimer = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
@@ -35,6 +34,7 @@ const TabataTimer = () => {
   const [rounds, setRounds] = useState<number>(8);
   const [currentTime, setCurrentTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
+  const [presetsOpen, setPresetsOpen] = useState(false);
   const [hero, setHero] = useState<HTMLElement | null>(null);
   const { playSignal } = useSound();
   const { isLoading } = useLoading();
@@ -73,10 +73,10 @@ const TabataTimer = () => {
     playSignal(SIGNAL_MELODIES.stop);
   }, [playSignal]);
 
-  const applyClassicTabata = () => {
-    setWorkTime(CLASSIC_WORK);
-    setRestTime(CLASSIC_REST);
-    setRounds(CLASSIC_ROUNDS);
+  const applyPreset = (preset: Preset) => {
+    setWorkTime(preset.workTime);
+    setRestTime(preset.restTime);
+    setRounds(preset.rounds);
   };
 
   const formatTime = (seconds: number) => {
@@ -219,11 +219,16 @@ const TabataTimer = () => {
         <button
           type="button"
           className={styles.preset}
-          onClick={applyClassicTabata}
+          onClick={() => setPresetsOpen(true)}
           disabled={isRunning}
         >
-          Classic Tabata (20 / 10 / 8)
+          🏋️ Preset Workouts
         </button>
+        <PresetsSheet
+          open={presetsOpen}
+          onClose={() => setPresetsOpen(false)}
+          onSelect={applyPreset}
+        />
         <SettingStepper
           label="Work"
           value={workTime}
