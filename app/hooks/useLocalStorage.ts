@@ -6,7 +6,7 @@ type UseLocalStorage<T> = {
   setValue: Dispatch<SetStateAction<T>>;
   value: T;
   key: LocalStorageKey;
-  type?: 'number' | 'string' | 'boolean';
+  type?: 'number' | 'string' | 'boolean' | 'object';
 };
 
 export enum LocalStorageKey {
@@ -16,6 +16,7 @@ export enum LocalStorageKey {
   restTime = 'restTime',
   rounds = 'rounds',
   isMuted = 'isMuted',
+  preset = 'preset'
 }
 
 let storageHydrated = false;
@@ -59,6 +60,8 @@ export const useLocalStorage = <T>({
       setValue(JSON.parse(String(storedValue)) as T);
     } else if (type === 'number') {
       setValue(Number(storedValue) as T);
+    } else if (type === 'object') {
+      setValue(JSON.parse(String(storedValue ?? null)) as T);
     } else {
       setValue(storedValue as T);
     }
@@ -71,7 +74,7 @@ export const useLocalStorage = <T>({
       skipSaveRef.current = false;
       return;
     }
-    saveToStorage(key, value);
+    saveToStorage(key, typeof value === 'object' ? JSON.stringify(value) : value);
   }, [key, value]);
 };
 

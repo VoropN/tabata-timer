@@ -122,6 +122,12 @@ const TabataTimer = () => {
     setValue: setRounds,
     type: 'number',
   });
+  useLocalStorage({
+    key: LocalStorageKey.preset,
+    value: selectedPreset,
+    setValue: setSelectedPreset,
+    type: 'object'
+  });
 
   useEffect(() => {
     if (isLoading || !isRunning) return;
