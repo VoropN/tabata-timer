@@ -1,0 +1,80 @@
+.row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 52px;
+}
+
+.label {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.value {
+  min-width: 4.5em;
+  text-align: center;
+  font-size: 1.25em;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+
+.phaseWork .value {
+  color: var(--phase-work);
+}
+
+.phaseRest .value {
+  color: var(--phase-rest);
+}
+
+.stepBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 0;
+  font-size: 1.1em;
+  color: var(--accent);
+  background: transparent;
+  border: 2px solid var(--accent);
+  border-radius: 12px;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+
+  &:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+}
+
+.phaseWork .stepBtn {
+  color: var(--phase-work);
+  border-color: var(--phase-work);
+
+  &:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--phase-work) 12%, transparent);
+  }
+}
+
+.phaseRest .stepBtn {
+  color: var(--phase-rest);
+  border-color: var(--phase-rest);
+
+  &:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--phase-rest) 12%, transparent);
+  }
+}

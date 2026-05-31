@@ -1,13 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useIsStorageHydrated } from './useLocalStorage';
 
 export const useLoading = () => {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    setIsLoading(false);
-  }, []);
-
-  return { isLoading };
+  const isHydrated = useIsStorageHydrated();
+  return { isLoading: !isHydrated };
 };

@@ -1,11 +1,12 @@
 'use client';
 
-import { SIGNAL_MELODIES, useWakeLock } from '@/app/hooks';
+import { useWakeLock } from '@/app/hooks';
 import { LocalStorageKey, useLocalStorage } from '@/app/hooks/useLocalStorage';
 
 import { useSound } from '@/app/contexts';
 import { useLoading } from '@/app/hooks/useLoading';
 import { useMaxFitFontSizeToWindow } from '@/app/hooks/useResize';
+import { SIGNAL_MELODIES } from '@/app/lib/signals';
 import {
   faClockRotateLeft,
   faHand,
@@ -17,46 +18,67 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Button from '../Button/Button';
-import ChangeSize from '../ChangeSize';
+import SettingStepper from '../SettingStepper';
 import StopButton from '../Timer';
 import styles from './TabataTimer.module.scss';
 
+const CLASSIC_WORK = 20;
+const CLASSIC_REST = 10;
+const CLASSIC_ROUNDS = 8;
+
 const TabataTimer = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
-  const [workTime, setWorkTime] = useState<number>(20); // sensible defaults
+  const [workTime, setWorkTime] = useState<number>(20);
   const [restTime, setRestTime] = useState<number>(10);
   const [rounds, setRounds] = useState<number>(8);
   const [currentTime, setCurrentTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
-  const [container, setContainer] = useState<HTMLElement | null>(null);
+  const [hero, setHero] = useState<HTMLElement | null>(null);
   const { playSignal } = useSound();
   const { isLoading } = useLoading();
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const fontSize = useMaxFitFontSizeToWindow(container);
+  const fontSize = useMaxFitFontSizeToWindow(hero, {
+    isRunning,
+    workTime,
+    restTime,
+    rounds,
+  });
 
   const oneRound = workTime + restTime;
   const maxTime = oneRound > 0 ? oneRound * rounds - restTime : 0;
 
-  const currentRound = Math.min(
-    rounds,
-    Math.floor((currentTime + restTime) / oneRound) + 1
-  );
+  const currentRound =
+    oneRound > 0
+      ? Math.min(
+          rounds,
+          Math.floor((currentTime + restTime) / oneRound) + 1
+        )
+      : 1;
   const isWorkPhase =
+    oneRound > 0 &&
     currentRound * oneRound - currentTime - restTime <= workTime;
   const roundTime = isWorkPhase
-    ? Math.max(workTime - (currentTime % oneRound), 0) // Work phase remaining time
+    ? Math.max(workTime - (currentTime % oneRound), 0)
     : Math.max(restTime - ((currentTime % oneRound) - workTime), 0);
+  const phaseDuration = isWorkPhase ? workTime : restTime;
   const roundTimeProgress =
-    (roundTime / (isWorkPhase ? workTime : restTime)) * 100;
+    phaseDuration > 0 ? (roundTime / phaseDuration) * 100 : 0;
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setCurrentTime(0);
     setIsRunning(false);
     playSignal(SIGNAL_MELODIES.stop);
+  }, [playSignal]);
+
+  const applyClassicTabata = () => {
+    setWorkTime(CLASSIC_WORK);
+    setRestTime(CLASSIC_REST);
+    setRounds(CLASSIC_ROUNDS);
   };
-  // Format time remaining as mm:ss
+
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
@@ -64,13 +86,14 @@ const TabataTimer = () => {
       remainingSeconds
     ).padStart(2, '0')}`;
   };
+
   const timeToShow = isWorkPhase
-    ? Math.max(workTime - (currentTime % oneRound), 0) // Work phase remaining time
-    : Math.max(restTime - ((currentTime % oneRound) - workTime), 0); // Rest phase remaining time
+    ? Math.max(workTime - (currentTime % oneRound), 0)
+    : Math.max(restTime - ((currentTime % oneRound) - workTime), 0);
+
   useWakeLock(isRunning);
 
   useEffect(() => {
-    // Set the 'data-theme' attribute on <html> to toggle between light and dark themes
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
@@ -107,40 +130,61 @@ const TabataTimer = () => {
     } else if (timeToShow === 3) {
       playSignal(SIGNAL_MELODIES.change3);
     }
-  }, [timeToShow]);
+  }, [timeToShow, isLoading, isRunning, playSignal]);
 
   useEffect(() => {
-    if (!isRunning) return;
+    if (!isRunning || maxTime <= 0) return;
 
-    const interval = setInterval(() => {
+    intervalRef.current = setInterval(() => {
       setCurrentTime((prev) => {
         const next = prev + 1;
         if (next >= maxTime) {
-          clearInterval(interval);
-          handleReset();
+          if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+          }
+          setIsRunning(false);
+          playSignal(SIGNAL_MELODIES.stop);
           return 0;
         }
-        return prev + 1;
+        return next;
       });
     }, 1000);
 
-    return () => clearInterval(interval);
-  }, [maxTime, isRunning]);
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
+  }, [maxTime, isRunning, playSignal]);
 
-  if (isLoading) return <></>;
-  const increaseSize = (factor: number) => (prev: number) => prev + factor;
-  const decreaseSize = (factor: number, min: number) => (prev: number) =>
-    Math.max(prev - factor, min);
+  const handlePlayPause = () => {
+    if (isRunning) {
+      setIsRunning(false);
+      playSignal(SIGNAL_MELODIES.stop);
+    } else {
+      setIsRunning(true);
+      playSignal(SIGNAL_MELODIES.start);
+    }
+  };
+
+  if (isLoading) return null;
 
   return (
-    <>
+    <div
+      className={clsx(styles.timerContainer, {
+        [styles.isRunning]: isRunning,
+        [styles.isWorkPhase]: isWorkPhase,
+      })}
+    >
       <div
-        ref={(ref) => setContainer(ref)}
-        style={{ fontSize, ['--progress' as any]: `${roundTimeProgress}%` }}
-        className={clsx(styles.timerContainer, {
-          [styles.isRunning]: isRunning,
-          [styles.isWorkPhase]: isWorkPhase,
-        })}
+        ref={(ref) => setHero(ref)}
+        className={styles.timerHero}
+        style={{
+          fontSize,
+          ['--progress' as string]: `${roundTimeProgress}%`,
+        }}
       >
         <div className={styles.phaseName}>
           {isWorkPhase ? <>Work Phase</> : <>Rest Phase</>}
@@ -158,9 +202,7 @@ const TabataTimer = () => {
             })}
             icon={isWorkPhase ? faRunning : faHand}
           />
-          <span className={clsx(styles.workTime)}>
-            {formatTime(timeToShow)}
-          </span>
+          <span className={clsx(styles.workTime)}>{formatTime(timeToShow)}</span>
         </div>
         <div className={styles.roundStatus}>
           <span>Round: </span>
@@ -168,62 +210,79 @@ const TabataTimer = () => {
             {currentRound}/{rounds}
           </span>
         </div>
-
-        <div className={clsx(styles.timerControls)}>
-          <label>Work Time (sec): </label>
-          <ChangeSize
-            increaseSize={(factor) => setWorkTime(increaseSize(factor))}
-            decreaseSize={(factor) => setWorkTime(decreaseSize(factor, 1))}
-          >
-            <span className={styles.timeControl}>{workTime}</span>
-          </ChangeSize>
-          <label>Rest Time (sec): </label>
-          <ChangeSize
-            increaseSize={(factor) => setRestTime(increaseSize(factor))}
-            decreaseSize={(factor) => setRestTime(decreaseSize(factor, 0))}
-          >
-            <span className={styles.timeControl}>{restTime}</span>
-          </ChangeSize>
-          <label>Rounds: </label>
-          <ChangeSize
-            increaseSize={(factor) => setRounds(increaseSize(factor))}
-            decreaseSize={(factor) => setRounds(decreaseSize(factor, 1))}
-          >
-            <span className={styles.timeControl}>{rounds}</span>
-          </ChangeSize>
-        </div>
-        <div className={styles.actionButtons}>
-          <Button onClick={handleReset} icon={faClockRotateLeft} />
-          <Button
-            type="icon"
-            className={styles.iconButton}
-            onClick={() => {
-              setIsRunning(!isRunning);
-              playSignal(SIGNAL_MELODIES.start);
-            }}
-          >
-            {isRunning ? (
-              <StopButton time={maxTime} currentTime={currentTime}>
-                <FontAwesomeIcon className={styles.icon} icon={faPause} />
-              </StopButton>
-            ) : (
-              <FontAwesomeIcon
-                className={clsx(styles.icon, styles.stop)}
-                icon={faPlay}
-              />
-            )}
-          </Button>
-          <Button
-            onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-            icon={theme === 'light' ? faLightbulb : faMoon}
-          />
-        </div>
-
         <div className={styles.fullTime}>
-          {formatTime(maxTime - currentTime)}
+          {formatTime(Math.max(maxTime - currentTime, 0))}
         </div>
       </div>
-    </>
+
+      <div className={styles.timerControls}>
+        <button
+          type="button"
+          className={styles.preset}
+          onClick={applyClassicTabata}
+          disabled={isRunning}
+        >
+          Classic Tabata (20 / 10 / 8)
+        </button>
+        <SettingStepper
+          label="Work"
+          value={workTime}
+          onChange={setWorkTime}
+          min={5}
+          max={120}
+          step={5}
+          unit="sec"
+          phase="work"
+          disabled={isRunning}
+        />
+        <SettingStepper
+          label="Rest"
+          value={restTime}
+          onChange={setRestTime}
+          min={0}
+          max={60}
+          step={5}
+          unit="sec"
+          phase="rest"
+          disabled={isRunning}
+        />
+        <SettingStepper
+          label="Rounds"
+          value={rounds}
+          onChange={setRounds}
+          min={1}
+          max={20}
+          step={1}
+          disabled={isRunning}
+        />
+      </div>
+
+      <div className={styles.actionButtons}>
+        <Button onClick={handleReset} icon={faClockRotateLeft} />
+        <Button
+          type="icon"
+          className={clsx(styles.iconButton, {
+            [styles.playPauseRunning]: isRunning,
+          })}
+          onClick={handlePlayPause}
+        >
+          {isRunning ? (
+            <StopButton time={maxTime} currentTime={currentTime}>
+              <FontAwesomeIcon className={styles.icon} icon={faPause} />
+            </StopButton>
+          ) : (
+            <FontAwesomeIcon
+              className={clsx(styles.icon, styles.stop)}
+              icon={faPlay}
+            />
+          )}
+        </Button>
+        <Button
+          onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+          icon={theme === 'light' ? faLightbulb : faMoon}
+        />
+      </div>
+    </div>
   );
 };
 

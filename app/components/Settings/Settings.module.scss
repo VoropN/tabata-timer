@@ -1,13 +1,14 @@
-$offset: 15px;
-
 .volumeControl,
 .refresh {
   position: fixed;
-  right: $offset;
-  top: 35px;
+  top: max(12px, env(safe-area-inset-top));
   z-index: 1000;
 }
 
+.volumeControl {
+  right: max(12px, env(safe-area-inset-right));
+}
+
 .refresh {
-  left: $offset;
+  left: max(12px, env(safe-area-inset-left));
 }

@@ -9,11 +9,14 @@ type IPlayButton = {
 };
 
 const Timer = ({ currentTime, time, children }: IPlayButton) => {
+  const progress =
+    time > 0 ? `${(currentTime / time) * 360}deg` : '0deg';
+
   return (
     <div
       className={styles.circleTimer}
       style={{
-        ['--progress' as any]: `${(currentTime / time) * 360}deg`,
+        ['--progress' as string]: progress,
       }}
     >
       {children}
