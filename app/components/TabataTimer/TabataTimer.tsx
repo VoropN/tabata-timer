@@ -229,7 +229,7 @@ const TabataTimer = () => {
           value={workTime}
           onChange={setWorkTime}
           min={5}
-          max={120}
+          max={600}
           step={5}
           unit="sec"
           phase="work"
@@ -240,7 +240,7 @@ const TabataTimer = () => {
           value={restTime}
           onChange={setRestTime}
           min={0}
-          max={60}
+          max={300}
           step={5}
           unit="sec"
           phase="rest"
@@ -251,7 +251,7 @@ const TabataTimer = () => {
           value={rounds}
           onChange={setRounds}
           min={1}
-          max={20}
+          max={100}
           step={1}
           disabled={isRunning}
         />

@@ -18,21 +18,53 @@
   gap: 8px;
 }
 
-.value {
+.valueBtn {
   min-width: 4.5em;
+  min-height: 48px;
+  padding: 4px 8px;
   text-align: center;
   font-size: 1.25em;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
+  font-family: inherit;
   color: var(--text);
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--text) 35%, transparent);
+  text-underline-offset: 3px;
+
+  &:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    text-decoration: none;
+  }
 }
 
-.phaseWork .value {
+.phaseWork .valueBtn {
   color: var(--phase-work);
+  text-decoration-color: color-mix(in srgb, var(--phase-work) 45%, transparent);
+
+  &:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--phase-work) 10%, transparent);
+  }
 }
 
-.phaseRest .value {
+.phaseRest .valueBtn {
   color: var(--phase-rest);
+  text-decoration-color: color-mix(in srgb, var(--phase-rest) 45%, transparent);
+
+  &:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--phase-rest) 10%, transparent);
+  }
 }
 
 .stepBtn {
