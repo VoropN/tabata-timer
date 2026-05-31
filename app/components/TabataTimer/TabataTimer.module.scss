@@ -178,7 +178,10 @@
     color: var(--phase-rest);
   }
 
-  .timerDisplayIcon,
+  .timerDisplayIcon {
+    visibility: hidden;
+   }
+
   .timerControls {
     opacity: .35;
   }
