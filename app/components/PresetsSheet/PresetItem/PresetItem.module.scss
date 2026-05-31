@@ -1,0 +1,102 @@
+.card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 14px 16px;
+  text-align: left;
+  font-family: inherit;
+  color: var(--text);
+  background: color-mix(in srgb, var(--text) 4%, transparent);
+  border: 1px solid color-mix(in srgb, var(--text) 8%, transparent);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+
+  &:hover {
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+    border-color: color-mix(in srgb, var(--accent) 30%, transparent);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    touch-action: none;
+    opacity: .35;
+    cursor: not-allowed;
+    transform: translateY(0);
+  }
+}
+
+.cardEmoji {
+  font-size: 1.75rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.cardName {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.cardDesc {
+  font-size: 0.75rem;
+  color: color-mix(in srgb, var(--text) 55%, transparent);
+  line-height: 1.3;
+}
+
+.cardTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 4px;
+}
+
+.tagWork,
+.tagRest,
+.tagRounds {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.tagWork {
+  background: color-mix(in srgb, var(--phase-work) 15%, transparent);
+  color: var(--phase-work);
+}
+
+.tagRest {
+  background: color-mix(in srgb, var(--phase-rest) 15%, transparent);
+  color: var(--phase-rest);
+}
+
+.tagRounds {
+  background: color-mix(in srgb, var(--text) 10%, transparent);
+  color: color-mix(in srgb, var(--text) 65%, transparent);
+}
+
+.cardTotal {
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: color-mix(in srgb, var(--text) 45%, transparent);
+  flex-shrink: 0;
+}
+

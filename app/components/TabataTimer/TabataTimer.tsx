@@ -25,7 +25,7 @@ import SettingStepper from '../SettingStepper';
 import StopButton from '../Timer';
 import styles from './TabataTimer.module.scss';
 import type { Preset } from '@/app/lib/presets';
-
+import PresetItem from '../PresetsSheet/PresetItem'
 
 const TabataTimer = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
@@ -35,6 +35,7 @@ const TabataTimer = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [presetsOpen, setPresetsOpen] = useState(false);
+  const [selectedPreset, setSelectedPreset] = useState<Preset>();
   const [hero, setHero] = useState<HTMLElement | null>(null);
   const { playSignal } = useSound();
   const { isLoading } = useLoading();
@@ -77,6 +78,7 @@ const TabataTimer = () => {
     setWorkTime(preset.workTime);
     setRestTime(preset.restTime);
     setRounds(preset.rounds);
+    setSelectedPreset(preset);
   };
 
   const formatTime = (seconds: number) => {
@@ -216,14 +218,17 @@ const TabataTimer = () => {
       </div>
 
       <div className={styles.timerControls}>
-        <button
-          type="button"
-          className={styles.preset}
-          onClick={() => setPresetsOpen(true)}
-          disabled={isRunning}
-        >
-          🏋️ Preset Workouts
-        </button>
+        {selectedPreset ?
+            <PresetItem preset={selectedPreset} handleSelect={() => setPresetsOpen(true)} disabled={isRunning}/> :
+            <button
+                type="button"
+                className={styles.preset}
+                onClick={() => setPresetsOpen(true)}
+                disabled={isRunning}
+            >
+              🏋️ Preset Workouts
+            </button>
+        }
         <PresetsSheet
           open={presetsOpen}
           onClose={() => setPresetsOpen(false)}

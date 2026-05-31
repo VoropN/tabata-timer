@@ -3,12 +3,11 @@
 import { useEffect, useId, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import {
-  calcTotalDuration,
-  formatDuration,
   PRESETS,
   type Preset,
 } from '@/app/lib/presets';
 import styles from './PresetsSheet.module.scss';
+import PresetItem from './PresetItem';
 
 export type PresetsSheetProps = {
   open: boolean;
@@ -71,40 +70,11 @@ const PresetsSheet = ({ open, onClose, onSelect }: PresetsSheetProps) => {
         </header>
 
         <ul className={styles.list} role="list">
-          {PRESETS.map((preset) => {
-            const total = calcTotalDuration(preset);
-            return (
+          {PRESETS.map((preset) => (
               <li key={preset.name}>
-                <button
-                  type="button"
-                  className={styles.card}
-                  onClick={() => handleSelect(preset)}
-                >
-                  <span className={styles.cardEmoji} aria-hidden="true">
-                    {preset.emoji}
-                  </span>
-                  <span className={styles.cardBody}>
-                    <span className={styles.cardName}>{preset.name}</span>
-                    <span className={styles.cardDesc}>{preset.description}</span>
-                    <span className={styles.cardTags}>
-                      <span className={styles.tagWork}>
-                        Work {formatDuration(preset.workTime)}
-                      </span>
-                      <span className={styles.tagRest}>
-                        Rest {formatDuration(preset.restTime)}
-                      </span>
-                      <span className={styles.tagRounds}>
-                        {preset.rounds} rounds
-                      </span>
-                    </span>
-                  </span>
-                  <span className={styles.cardTotal}>
-                    {formatDuration(total)}
-                  </span>
-                </button>
+                <PresetItem preset={preset} handleSelect={handleSelect} />
               </li>
-            );
-          })}
+            ))}
         </ul>
       </div>
     </div>,
