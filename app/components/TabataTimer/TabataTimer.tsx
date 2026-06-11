@@ -41,12 +41,7 @@ const TabataTimer = () => {
   const { isLoading } = useLoading();
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const fontSize = useMaxFitFontSizeToWindow(hero, {
-    isRunning,
-    workTime,
-    restTime,
-    rounds,
-  });
+  const fontSize = useMaxFitFontSizeToWindow(hero);
 
   const oneRound = workTime + restTime;
   const maxTime = oneRound > 0 ? oneRound * rounds - restTime : 0;

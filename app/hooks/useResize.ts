@@ -4,16 +4,8 @@ const HERO_BASE_DEFAULT = 20;
 const HERO_BASE_MIN = 16;
 const HERO_BASE_MAX = 28;
 
-type FitDeps = {
-  isRunning: boolean;
-  workTime: number;
-  restTime: number;
-  rounds: number;
-};
-
 export const useMaxFitFontSizeToWindow = (
   hero: HTMLElement | null,
-  deps?: FitDeps
 ) => {
   const [fontSize, setFontSize] = useState<number>(HERO_BASE_DEFAULT);
 
