@@ -9,17 +9,36 @@ type IPlayButton = {
 };
 
 const Timer = ({ currentTime, time, children }: IPlayButton) => {
-  const progress =
-    time > 0 ? `${(currentTime / time) * 360}deg` : '0deg';
+  const radius = 45;
+  const strokeDasharray = 2 * Math.PI * radius;
+  const progress = time > 0 ? currentTime / time : 0;
+  const strokeDashoffset = strokeDasharray * (1 - progress);
 
   return (
-    <div
-      className={styles.circleTimer}
-      style={{
-        ['--progress' as string]: progress,
-      }}
-    >
-      {children}
+    <div className={styles.circleTimer}>
+      <svg className={styles.svg} viewBox="0 0 100 100">
+        <circle
+          className={styles.bgCircle}
+          cx="50"
+          cy="50"
+          r={radius}
+        />
+        <circle
+          className={styles.fgCircle}
+          cx="50"
+          cy="50"
+          r={radius}
+          style={{
+            strokeDasharray,
+            strokeDashoffset,
+            // Disable transition when reset to 0
+            transition: currentTime === 0 ? 'none' : 'stroke-dashoffset 1s linear',
+          }}
+        />
+      </svg>
+      <div className={styles.content}>
+        {children}
+      </div>
     </div>
   );
 };

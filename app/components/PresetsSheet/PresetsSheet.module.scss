@@ -7,6 +7,8 @@
   justify-content: center;
   background: rgba(0, 0, 0, 0.45);
   -webkit-tap-highlight-color: transparent;
+  overflow: hidden;
+  touch-action: none;
 }
 
 .sheet {
@@ -21,6 +23,7 @@
   flex-direction: column;
   animation: slideUp 0.25s ease-out;
   overflow: hidden;
+  overscroll-behavior: contain;
 
   @media (prefers-reduced-motion: reduce) {
     animation: none;
@@ -86,5 +89,6 @@
   gap: 8px;
   scrollbar-width: thin;
   scrollbar-color: color-mix(in srgb, var(--text) 15%, transparent) transparent;
+  overscroll-behavior: contain;
 }
 

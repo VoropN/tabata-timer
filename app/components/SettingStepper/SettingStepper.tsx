@@ -3,7 +3,7 @@
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import SettingPickerSheet from '../SettingPickerSheet';
 import styles from './SettingStepper.module.scss';
 
@@ -39,8 +39,20 @@ const SettingStepper = ({
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const displayValue = unit ? `${value} ${unit}` : String(value);
 
+  const valueRef = useRef(value);
+  valueRef.current = value;
+
+  const minRef = useRef(min);
+  minRef.current = min;
+  const maxRef = useRef(max);
+  maxRef.current = max;
+
   const adjust = (delta: number) => {
-    onChange(clamp(value + delta, min, max));
+    const nextValue = clamp(valueRef.current + delta, minRef.current, maxRef.current);
+    onChange(nextValue);
+    if (nextValue === minRef.current || nextValue === maxRef.current) {
+      stopRepeat();
+    }
   };
 
   const startRepeat = (delta: number) => {
@@ -54,6 +66,14 @@ const SettingStepper = ({
       timerRef.current = null;
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, []);
 
   const bindPointer = (delta: number) => ({
     onPointerDown: (e: React.PointerEvent<HTMLButtonElement>) => {

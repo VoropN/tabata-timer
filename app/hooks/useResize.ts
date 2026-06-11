@@ -64,14 +64,7 @@ export const useMaxFitFontSizeToWindow = (
       window.removeEventListener('resize', resizeFont);
       observer.disconnect();
     };
-  }, [
-    hero,
-    resizeFont,
-    deps?.isRunning,
-    deps?.workTime,
-    deps?.restTime,
-    deps?.rounds,
-  ]);
+  }, [hero, resizeFont]);
 
   return fontSize;
 };

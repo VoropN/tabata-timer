@@ -22,8 +22,10 @@ const PresetsSheet = ({ open, onClose, onSelect }: PresetsSheetProps) => {
   useEffect(() => {
     if (!open) return;
 
-    const previousOverflow = document.body.style.overflow;
+    const previousBodyOverflow = document.body.style.overflow;
+    const previousHtmlOverflow = document.documentElement.style.overflow;
     document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
 
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -33,7 +35,8 @@ const PresetsSheet = ({ open, onClose, onSelect }: PresetsSheetProps) => {
     closeRef.current?.focus();
 
     return () => {
-      document.body.style.overflow = previousOverflow;
+      document.body.style.overflow = previousBodyOverflow;
+      document.documentElement.style.overflow = previousHtmlOverflow;
       document.removeEventListener('keydown', onKeyDown);
     };
   }, [open, onClose]);
