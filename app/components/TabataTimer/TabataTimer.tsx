@@ -25,7 +25,6 @@ import SettingStepper from '../SettingStepper';
 import StopButton from '../Timer';
 import styles from './TabataTimer.module.scss';
 import { PRESETS, type Preset } from '@/app/lib/presets';
-import PresetItem from '../PresetsSheet/PresetItem';
 
 const TabataTimer = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
@@ -234,17 +233,29 @@ const TabataTimer = () => {
       </div>
 
       <div className={styles.timerControls}>
-        {selectedPreset ?
-            <PresetItem preset={selectedPreset} handleSelect={() => setPresetsOpen(true)} disabled={isRunning}/> :
-            <button
-                type="button"
-                className={styles.preset}
-                onClick={() => setPresetsOpen(true)}
-                disabled={isRunning}
-            >
-              🏋️ Preset Workouts
-            </button>
-        }
+        {selectedPreset ? (
+          <button
+            type="button"
+            className={clsx(styles.preset, styles.presetSelected)}
+            onClick={() => setPresetsOpen(true)}
+            disabled={isRunning}
+          >
+            <span className={styles.presetContent}>
+              <span className={styles.presetEmoji}>{selectedPreset.emoji}</span>
+              <span className={styles.presetName}>{selectedPreset.name}</span>
+            </span>
+            <span className={styles.presetBadge}>Change</span>
+          </button>
+        ) : (
+          <button
+            type="button"
+            className={styles.preset}
+            onClick={() => setPresetsOpen(true)}
+            disabled={isRunning}
+          >
+            🏋️ Preset Workouts
+          </button>
+        )}
         <PresetsSheet
           open={presetsOpen}
           onClose={() => setPresetsOpen(false)}

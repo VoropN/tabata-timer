@@ -78,6 +78,56 @@
   }
 }
 
+.presetSelected {
+  justify-content: space-between !important;
+  border-color: color-mix(in srgb, var(--accent) 30%, var(--card-border)) !important;
+  background: color-mix(in srgb, var(--accent) 6%, var(--control-track)) !important;
+
+  &:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--accent) 12%, var(--control-track)) !important;
+  }
+}
+
+.presetContent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.presetEmoji {
+  font-size: 1.1em;
+  line-height: 1;
+}
+
+.presetName {
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.presetBadge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+
+  .presetSelected:hover:not(:disabled) & {
+    background: var(--accent);
+    color: #ffffff;
+    border-color: transparent;
+  }
+}
+
 .fullTime {
   font-size: 1.1em;
   font-weight: 600;

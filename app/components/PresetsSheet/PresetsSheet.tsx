@@ -27,7 +27,7 @@ const PresetsSheet = ({ open, onClose, onSelect }: PresetsSheetProps) => {
     };
 
     document.addEventListener('keydown', onKeyDown);
-    closeRef.current?.focus();
+    closeRef.current?.focus({ preventScroll: true });
 
     return () => {
       document.removeEventListener('keydown', onKeyDown);

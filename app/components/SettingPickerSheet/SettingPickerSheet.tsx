@@ -58,7 +58,7 @@ const SettingPickerSheet = ({
     };
 
     document.addEventListener('keydown', onKeyDown);
-    doneRef.current?.focus();
+    doneRef.current?.focus({ preventScroll: true });
 
     // Scroll container to the selected item index
     const timer = setTimeout(() => {
