@@ -1,5 +1,3 @@
-@use '../../styles/variables.scss' as vars;
-
 .circleTimer {
   position: relative;
   width: 100%;
@@ -8,9 +6,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: var(--btn-shadow-glow);
   background: var(--surface);
   overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .svg {
@@ -18,21 +16,23 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  transform: rotate(-90deg);
+  transform: rotate(-90deg) scale(1.02); /* scale slightly to align perfectly with edge */
+  transform-origin: center;
   pointer-events: none;
 }
 
 .bgCircle {
   fill: none;
-  stroke: transparent;
-  stroke-width: 10;
+  stroke: var(--progress-track);
+  stroke-width: 8;
 }
 
 .fgCircle {
   fill: none;
   stroke: var(--accent);
-  stroke-width: 10;
-  filter: vars.$filter;
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke 0.3s ease;
 }
 
 .content {

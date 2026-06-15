@@ -1,141 +1,210 @@
 @use '../../styles/variables.scss' as vars;
 
 .timerContainer {
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   box-sizing: border-box;
   width: 100%;
-  max-width: 100%;
-  max-height: 100%;
+  max-width: 440px;
   margin: auto;
-  padding: 0 10px;
+  padding: 24px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 28px;
+  box-shadow: var(--btn-shadow);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   -webkit-user-select: none;
   user-select: none;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .timerHero {
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   width: 100%;
+  position: relative;
+  padding: 24px 0 16px;
 }
 
 .timerControls {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
   width: 100%;
-  padding-top: 10px;
+  padding-top: 20px;
   font-size: 1rem;
+  transition: opacity 0.3s ease;
 }
 
 .preset {
   width: 100%;
-  min-height: 48px;
-  padding: 12px 16px;
-  font-size: 1em;
+  min-height: 52px;
+  padding: 12px 20px;
+  font-size: 0.95em;
   font-weight: 600;
   font-family: inherit;
   color: var(--text);
-  background: transparent;
-  border: 2px solid var(--accent);
-  border-radius: 12px;
+  background: var(--control-track);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 
   &:hover:not(:disabled) {
-    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    background: color-mix(in srgb, var(--accent) 8%, var(--control-track));
+    border-color: color-mix(in srgb, var(--accent) 30%, var(--card-border));
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.12);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
   }
 
   &:disabled {
-    opacity: 0.4;
+    opacity: 0.3;
     cursor: not-allowed;
   }
 }
 
 .fullTime {
-  font-size: 4em;
-  color: var(--phase-rest);
+  font-size: 1.1em;
+  font-weight: 600;
+  color: var(--text-muted);
   text-align: center;
   display: flex;
+  align-items: center;
   justify-content: center;
   width: 100%;
-  line-height: 1;
+  margin-top: 8px;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.8;
+  letter-spacing: 0.02em;
 }
 
 .timerDisplay {
-  grid-gap: 10px;
-  margin: 20px 0;
-  font-size: 4em;
+  margin: 16px 0;
+  font-size: 5em;
+  font-weight: 800;
   display: grid;
   place-items: center;
   position: relative;
+  width: 100%;
 
   &Icon {
-    font-size: 1.5em;
+    font-size: 1.4em;
+    filter: drop-shadow(0 0 20px rgba(46, 213, 115, 0.3));
+    transition: all 0.3s ease;
   }
 
   .stop {
     transform: scaleX(-1);
+    filter: drop-shadow(0 0 20px rgba(255, 71, 87, 0.3));
   }
 }
 
 .phaseName {
   color: var(--phase-work);
-  font-weight: bold;
+  font-size: 1em;
+  font-weight: 800;
   text-transform: uppercase;
   text-align: center;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.12em;
+  filter: drop-shadow(0 2px 8px var(--phase-work-glow));
+  transition: all 0.3s ease;
 }
 
 .isRunning:not(.isWorkPhase) .phaseName {
   color: var(--phase-rest);
+  filter: drop-shadow(0 2px 8px var(--phase-rest-glow));
 }
 
 .roundStatus {
-  font-size: 1.2em;
-  justify-content: space-around;
+  font-size: 1.15em;
+  font-weight: 500;
+  color: var(--text-muted);
+  justify-content: center;
   align-items: center;
   display: flex;
-  opacity: 0.95;
+  gap: 6px;
+  margin-top: 4px;
 }
 
 .roundStatusNumber {
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
 }
 
 .actionButtons {
-  padding: 10px 0;
-  gap: 20px;
-  display: grid;
-  grid-template-columns: auto auto auto;
-  justify-items: center;
+  padding-top: 20px;
+  gap: 24px;
+  display: flex;
+  justify-content: center;
   align-items: center;
+  width: 100%;
 
   .iconButton {
+    border-color: var(--card-border);
+    background: var(--control-track);
+    box-shadow: var(--glass-shadow);
+
     .stop {
-      transform: translateX(0.1em);
+      transform: translateX(0.05em);
     }
 
     .icon {
-      color: var(--accent);
+      color: var(--text);
     }
 
     &:hover {
-      background-color: transparent;
+      background: color-mix(in srgb, var(--text) 8%, var(--control-track));
+      border-color: var(--text-muted);
+      transform: scale(1.08);
+    }
 
-      .icon {
-        color: var(--accent-hover);
-      }
+    &:active {
+      transform: scale(0.95);
     }
   }
 
   .playPauseRunning {
-    width: 3.5em;
-    height: 3.5em;
-    min-width: 56px;
-    min-height: 56px;
-    font-size: 2.2em;
+    width: 72px;
+    height: 72px;
+    min-width: 72px;
+    min-height: 72px;
+    border-radius: 50%;
+    font-size: 1.8em;
+    background: var(--accent-gradient);
+    border: none;
+    box-shadow: var(--btn-shadow-glow);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    .icon {
+      color: var(--surface);
+    }
+
+    &:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 24px var(--accent-glow);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
   }
 }
 
@@ -155,11 +224,23 @@
 }
 
 .workTime {
-  line-height: 0.8;
+  line-height: 0.9;
   color: var(--phase-work);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  filter: drop-shadow(0 4px 12px var(--phase-work-glow));
+  transition: all 0.3s ease;
 }
 
 .isRunning {
+  border-color: color-mix(in srgb, var(--phase-rest) 20%, var(--card-border));
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3), 0 0 40px var(--phase-rest-glow);
+
+  &.isWorkPhase {
+    border-color: color-mix(in srgb, var(--phase-work) 20%, var(--card-border));
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3), 0 0 40px var(--phase-work-glow);
+  }
+
   .workTime {
     color: transparent;
     -webkit-text-fill-color: transparent;
@@ -171,19 +252,17 @@
     );
     -webkit-background-clip: text;
     background-clip: text;
+    filter: drop-shadow(0 4px 16px var(--phase-rest-glow));
   }
 
   .fullTime {
-    font-size: 2em;
-    color: var(--phase-rest);
+    font-size: 1.15em;
+    color: var(--text);
   }
 
-  .timerDisplayIcon {
-    visibility: hidden;
-   }
-
   .timerControls {
-    opacity: .35;
+    opacity: 0.15;
+    pointer-events: none;
   }
 
   .timerDisplayIcon {
@@ -207,6 +286,7 @@
   );
   -webkit-background-clip: text;
   background-clip: text;
+  filter: drop-shadow(0 4px 16px var(--phase-work-glow));
 }
 
 .isRunning:not(.isWorkPhase) .workTime {

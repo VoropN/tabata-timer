@@ -2,68 +2,106 @@
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
   width: 100%;
-  min-height: 52px;
+  min-height: 56px;
+  padding: 8px 12px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--accent) 30%, var(--card-border));
+    transform: translateY(-1px);
+  }
 }
 
 .label {
   font-weight: 600;
-  color: var(--text);
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  color: var(--text-muted);
+  transition: color 0.3s ease;
+}
+
+.row[data-phase="work"] {
+  &:hover {
+    border-color: color-mix(in srgb, var(--phase-work) 30%, var(--card-border));
+  }
+  .label {
+    color: var(--text);
+  }
+}
+
+.row[data-phase="rest"] {
+  &:hover {
+    border-color: color-mix(in srgb, var(--phase-rest) 30%, var(--card-border));
+  }
+  .label {
+    color: var(--text);
+  }
 }
 
 .controls {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
 }
 
 .valueBtn {
-  min-width: 4.5em;
-  min-height: 48px;
-  padding: 4px 8px;
+  min-width: 4.8em;
+  min-height: 40px;
+  padding: 4px 12px;
   text-align: center;
-  font-size: 1.25em;
+  font-size: 1.15em;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   font-family: inherit;
   color: var(--text);
-  background: transparent;
-  border: none;
-  border-radius: 8px;
+  background: var(--control-track);
+  border: 1px solid transparent;
+  border-radius: 10px;
   cursor: pointer;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
-  text-decoration: underline;
-  text-decoration-color: color-mix(in srgb, var(--text) 35%, transparent);
-  text-underline-offset: 3px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 
   &:hover:not(:disabled) {
-    background: color-mix(in srgb, var(--accent) 10%, transparent);
+    background: color-mix(in srgb, var(--accent) 8%, var(--control-track));
+    border-color: color-mix(in srgb, var(--accent) 20%, transparent);
+    transform: scale(1.03);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.97);
   }
 
   &:disabled {
     opacity: 0.35;
     cursor: not-allowed;
-    text-decoration: none;
+    background: transparent;
   }
 }
 
 .phaseWork .valueBtn {
   color: var(--phase-work);
-  text-decoration-color: color-mix(in srgb, var(--phase-work) 45%, transparent);
 
   &:hover:not(:disabled) {
-    background: color-mix(in srgb, var(--phase-work) 10%, transparent);
+    background: color-mix(in srgb, var(--phase-work) 8%, var(--control-track));
+    border-color: color-mix(in srgb, var(--phase-work) 20%, transparent);
   }
 }
 
 .phaseRest .valueBtn {
   color: var(--phase-rest);
-  text-decoration-color: color-mix(in srgb, var(--phase-rest) 45%, transparent);
 
   &:hover:not(:disabled) {
-    background: color-mix(in srgb, var(--phase-rest) 10%, transparent);
+    background: color-mix(in srgb, var(--phase-rest) 8%, var(--control-track));
+    border-color: color-mix(in srgb, var(--phase-rest) 20%, transparent);
   }
 }
 
@@ -71,42 +109,48 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 48px;
-  min-height: 48px;
+  width: 40px;
+  height: 40px;
   padding: 0;
-  font-size: 1.1em;
-  color: var(--accent);
-  background: transparent;
-  border: 2px solid var(--accent);
-  border-radius: 12px;
+  font-size: 0.95em;
+  color: var(--text-muted);
+  background: var(--control-track);
+  border: 1px solid var(--card-border);
+  border-radius: 50%;
   cursor: pointer;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 
   &:hover:not(:disabled) {
-    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 10%, var(--control-track));
+    border-color: color-mix(in srgb, var(--accent) 30%, var(--card-border));
+    transform: scale(1.1);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.9);
   }
 
   &:disabled {
-    opacity: 0.35;
+    opacity: 0.25;
     cursor: not-allowed;
   }
 }
 
 .phaseWork .stepBtn {
-  color: var(--phase-work);
-  border-color: var(--phase-work);
-
   &:hover:not(:disabled) {
-    background: color-mix(in srgb, var(--phase-work) 12%, transparent);
+    color: var(--phase-work);
+    background: color-mix(in srgb, var(--phase-work) 10%, var(--control-track));
+    border-color: color-mix(in srgb, var(--phase-work) 30%, var(--card-border));
   }
 }
 
 .phaseRest .stepBtn {
-  color: var(--phase-rest);
-  border-color: var(--phase-rest);
-
   &:hover:not(:disabled) {
-    background: color-mix(in srgb, var(--phase-rest) 12%, transparent);
+    color: var(--phase-rest);
+    background: color-mix(in srgb, var(--phase-rest) 10%, var(--control-track));
+    border-color: color-mix(in srgb, var(--phase-rest) 30%, var(--card-border));
   }
 }

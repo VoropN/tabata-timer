@@ -56,6 +56,7 @@ const SettingStepper = ({
   };
 
   const startRepeat = (delta: number) => {
+    stopRepeat();
     adjust(delta);
     timerRef.current = setInterval(() => adjust(delta), 100);
   };

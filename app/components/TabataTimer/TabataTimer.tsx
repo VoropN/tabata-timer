@@ -24,8 +24,8 @@ import PresetsSheet from '../PresetsSheet';
 import SettingStepper from '../SettingStepper';
 import StopButton from '../Timer';
 import styles from './TabataTimer.module.scss';
-import type { Preset } from '@/app/lib/presets';
-import PresetItem from '../PresetsSheet/PresetItem'
+import { PRESETS, type Preset } from '@/app/lib/presets';
+import PresetItem from '../PresetsSheet/PresetItem';
 
 const TabataTimer = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
@@ -123,6 +123,21 @@ const TabataTimer = () => {
     setValue: setSelectedPreset,
     type: 'object'
   });
+
+  // Synchronize preset selection with current custom timings
+  useEffect(() => {
+    if (isLoading) return;
+
+    const matchingPreset = PRESETS.find(
+      (p) =>
+        p.workTime === workTime &&
+        p.restTime === restTime &&
+        p.rounds === rounds
+    );
+    if (selectedPreset?.name !== matchingPreset?.name) {
+      setSelectedPreset(matchingPreset);
+    }
+  }, [workTime, restTime, rounds, isLoading, selectedPreset]);
 
   useEffect(() => {
     if (isLoading || !isRunning) return;
