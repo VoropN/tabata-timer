@@ -1,7 +1,7 @@
 'use client';
 
 import clsx from 'clsx';
-import { useEffect, useId, useRef } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import styles from './SettingPickerSheet.module.scss';
 
@@ -37,8 +37,28 @@ const SettingPickerSheet = ({
   const titleId = useId();
   const doneRef = useRef<HTMLButtonElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isScrollingRef = useRef(false);
 
-  const displayValue = unit ? `${value} ${unit}` : String(value);
+  const [localValue, setLocalValue] = useState(value);
+
+  // Sync prop value to local value when picker opens or prop changes from outside
+  useEffect(() => {
+    if (!isScrollingRef.current) {
+      setLocalValue(value);
+    }
+  }, [value]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const displayValue = unit ? `${localValue} ${unit}` : String(localValue);
 
   // Generate dynamic array of values based on bounds
   const stepVal = step > 0 ? step : 1;
@@ -49,12 +69,20 @@ const SettingPickerSheet = ({
 
   const currentIndex = values.indexOf(value);
 
+  const handleCommitClose = () => {
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+    }
+    onChange(localValue);
+    onClose();
+  };
+
   // Scroll to active index on open
   useEffect(() => {
     if (!open) return;
 
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') handleCommitClose();
     };
 
     document.addEventListener('keydown', onKeyDown);
@@ -73,19 +101,30 @@ const SettingPickerSheet = ({
       clearTimeout(timer);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, onClose]);
+  }, [open, onClose, localValue]);
 
   if (!open || typeof document === 'undefined') return null;
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    isScrollingRef.current = true;
     const container = e.currentTarget;
     const scrollTop = container.scrollTop;
     const index = Math.round(scrollTop / ITEM_HEIGHT);
     if (index >= 0 && index < values.length) {
       const newValue = values[index];
-      if (newValue !== value) {
-        onChange(newValue);
+      if (newValue !== localValue) {
+        setLocalValue(newValue);
       }
+
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+      scrollTimeoutRef.current = setTimeout(() => {
+        isScrollingRef.current = false;
+        if (newValue !== value) {
+          onChange(newValue);
+        }
+      }, 100);
     }
   };
 
@@ -99,8 +138,10 @@ const SettingPickerSheet = ({
     }
   };
 
+  const currentLocalIndex = values.indexOf(localValue);
+
   return createPortal(
-    <div className={styles.overlay} onClick={onClose}>
+    <div className={styles.overlay} onClick={handleCommitClose}>
       <div
         role="dialog"
         aria-modal="true"
@@ -131,7 +172,7 @@ const SettingPickerSheet = ({
               <div
                 key={val}
                 className={clsx(styles.pickerItem, {
-                  [styles.active]: idx === currentIndex,
+                  [styles.active]: idx === currentLocalIndex,
                 })}
                 onClick={() => handleItemClick(idx)}
               >
@@ -146,7 +187,7 @@ const SettingPickerSheet = ({
             ref={doneRef}
             type="button"
             className={styles.doneBtn}
-            onClick={onClose}
+            onClick={handleCommitClose}
           >
             Done
           </button>
