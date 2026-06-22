@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 
-const HERO_BASE_DEFAULT = 20;
-const HERO_BASE_MIN = 16;
-const HERO_BASE_MAX = 28;
+const HERO_BASE_DEFAULT = 24;
+const HERO_BASE_MIN = 14;
+const HERO_BASE_MAX = 60;
 
 export const useMaxFitFontSizeToWindow = (
   hero: HTMLElement | null,

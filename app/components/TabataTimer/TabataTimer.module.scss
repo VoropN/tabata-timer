@@ -7,7 +7,7 @@
   justify-content: center;
   box-sizing: border-box;
   width: 100%;
-  max-width: 440px;
+  max-width: 480px;
   margin: auto;
   padding: 24px;
   background: var(--card-bg);
@@ -19,6 +19,16 @@
   -webkit-user-select: none;
   user-select: none;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+  @media (max-width: 520px) {
+    max-width: 100%;
+    min-height: 100dvh;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    padding: 16px 16px max(16px, env(safe-area-inset-bottom)) 16px;
+    justify-content: space-between;
+  }
 }
 
 .timerHero {
@@ -29,6 +39,7 @@
   width: 100%;
   position: relative;
   padding: 24px 0 16px;
+  flex: 1;
 }
 
 .timerControls {
@@ -144,13 +155,18 @@
 }
 
 .timerDisplay {
-  margin: 16px 0;
+  margin: 8px 0;
   font-size: 5em;
   font-weight: 800;
   display: grid;
   place-items: center;
   position: relative;
   width: 100%;
+
+  @media (max-width: 520px) {
+    font-size: 7em;
+    margin: 4px 0;
+  }
 
   &Icon {
     font-size: 1.4em;
@@ -173,6 +189,11 @@
   letter-spacing: 0.12em;
   filter: drop-shadow(0 2px 8px var(--phase-work-glow));
   transition: all 0.3s ease;
+
+  @media (max-width: 520px) {
+    font-size: 1.15em;
+    letter-spacing: 0.15em;
+  }
 }
 
 .isRunning:not(.isWorkPhase) .phaseName {

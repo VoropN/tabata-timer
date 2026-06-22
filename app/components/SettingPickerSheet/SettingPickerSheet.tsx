@@ -20,7 +20,12 @@ export type SettingPickerSheetProps = {
   phase?: Phase;
 };
 
-const ITEM_HEIGHT = 44; // Must match SCSS height
+// Must exactly match the height set in SettingPickerSheet.module.scss .pickerItem
+const ITEM_HEIGHT = 52;
+// Number of items visible at once (determines padding)
+const VISIBLE_ITEMS = 5;
+// Top/bottom padding so first and last items can reach the center
+const WHEEL_PADDING = (ITEM_HEIGHT * (VISIBLE_ITEMS - 1)) / 2; // = 104px
 
 const SettingPickerSheet = ({
   open,
@@ -37,111 +42,82 @@ const SettingPickerSheet = ({
   const titleId = useId();
   const doneRef = useRef<HTMLButtonElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const isScrollingRef = useRef(false);
+  const isProgrammaticScrollRef = useRef(false);
 
-  const [localValue, setLocalValue] = useState(value);
-
-  // Sync prop value to local value when picker opens or prop changes from outside
-  useEffect(() => {
-    if (!isScrollingRef.current) {
-      setLocalValue(value);
-    }
-  }, [value]);
-
-  // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-      }
-    };
-  }, []);
-
-  const displayValue = unit ? `${localValue} ${unit}` : String(localValue);
-
-  // Generate dynamic array of values based on bounds
   const stepVal = step > 0 ? step : 1;
   const values: number[] = [];
   for (let i = min; i <= max; i += stepVal) {
     values.push(i);
   }
 
-  const currentIndex = values.indexOf(value);
+  const clampedValue = values.includes(value) ? value : values[0];
+  const [localValue, setLocalValue] = useState(clampedValue);
 
-  const handleCommitClose = () => {
-    if (scrollTimeoutRef.current) {
-      clearTimeout(scrollTimeoutRef.current);
-    }
-    onChange(localValue);
+  // Scroll to a given index without triggering the scroll handler
+  const scrollToIndex = (idx: number, behavior: ScrollBehavior = 'auto') => {
+    const container = containerRef.current;
+    if (!container) return;
+    isProgrammaticScrollRef.current = true;
+    container.scrollTo({ top: idx * ITEM_HEIGHT, behavior });
+    // Reset flag after scroll settles
+    setTimeout(() => {
+      isProgrammaticScrollRef.current = false;
+    }, behavior === 'smooth' ? 400 : 50);
+  };
+
+  // Sync local state and scroll position when picker opens
+  useEffect(() => {
+    if (!open) return;
+    const idx = values.indexOf(clampedValue);
+    setLocalValue(clampedValue);
+    doneRef.current?.focus({ preventScroll: true });
+    // Defer scroll until the DOM is painted
+    const timer = setTimeout(() => scrollToIndex(idx >= 0 ? idx : 0), 30);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+
+  const handleCommitClose = (committedValue = localValue) => {
+    onChange(committedValue);
     onClose();
   };
 
-  // Scroll to active index on open
+  // Keyboard handling
   useEffect(() => {
     if (!open) return;
-
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') handleCommitClose();
     };
-
     document.addEventListener('keydown', onKeyDown);
-    doneRef.current?.focus({ preventScroll: true });
-
-    // Scroll container to the selected item index
-    const timer = setTimeout(() => {
-      const container = containerRef.current;
-      if (container && currentIndex !== -1) {
-        container.scrollTop = currentIndex * ITEM_HEIGHT;
-      }
-    }, 0);
-
-    return () => {
-      document.removeEventListener('keydown', onKeyDown);
-      clearTimeout(timer);
-    };
+    return () => document.removeEventListener('keydown', onKeyDown);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, onClose, localValue]);
+  }, [open, localValue]);
 
   if (!open || typeof document === 'undefined') return null;
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    isScrollingRef.current = true;
-    const container = e.currentTarget;
-    const scrollTop = container.scrollTop;
+    if (isProgrammaticScrollRef.current) return;
+    const scrollTop = e.currentTarget.scrollTop;
     const index = Math.round(scrollTop / ITEM_HEIGHT);
-    if (index >= 0 && index < values.length) {
-      const newValue = values[index];
-      if (newValue !== localValue) {
-        setLocalValue(newValue);
-      }
-
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-      }
-      scrollTimeoutRef.current = setTimeout(() => {
-        isScrollingRef.current = false;
-        if (newValue !== value) {
-          onChange(newValue);
-        }
-      }, 100);
+    const clamped = Math.max(0, Math.min(index, values.length - 1));
+    const newValue = values[clamped];
+    if (newValue !== undefined && newValue !== localValue) {
+      setLocalValue(newValue);
     }
   };
 
-  const handleItemClick = (index: number) => {
-    const container = containerRef.current;
-    if (container) {
-      container.scrollTo({
-        top: index * ITEM_HEIGHT,
-        behavior: 'smooth',
-      });
-    }
+  const handleItemClick = (idx: number) => {
+    const newValue = values[idx];
+    if (newValue === undefined) return;
+    setLocalValue(newValue);
+    scrollToIndex(idx, 'smooth');
   };
 
   const currentLocalIndex = values.indexOf(localValue);
+  const displayValue = unit ? `${localValue} ${unit}` : String(localValue);
 
   return createPortal(
-    <div className={styles.overlay} onClick={handleCommitClose}>
+    <div className={styles.overlay} onClick={() => handleCommitClose()}>
       <div
         role="dialog"
         aria-modal="true"
@@ -167,6 +143,7 @@ const SettingPickerSheet = ({
             ref={containerRef}
             className={styles.pickerWheel}
             onScroll={handleScroll}
+            style={{ '--wheel-padding': `${WHEEL_PADDING}px` } as React.CSSProperties}
           >
             {values.map((val, idx) => (
               <div
@@ -187,7 +164,7 @@ const SettingPickerSheet = ({
             ref={doneRef}
             type="button"
             className={styles.doneBtn}
-            onClick={handleCommitClose}
+            onClick={() => handleCommitClose()}
           >
             Done
           </button>
@@ -199,4 +176,3 @@ const SettingPickerSheet = ({
 };
 
 export default SettingPickerSheet;
-
