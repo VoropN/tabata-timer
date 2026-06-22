@@ -56,12 +56,18 @@ export const useLocalStorage = <T>({
 
   useEffect(() => {
     const storedValue = getFromStorage(key, value);
-    if (type === 'boolean') {
+    if (storedValue === undefined || storedValue === null) {
+      setValue(storedValue as T);
+    } else if (type === 'boolean') {
       setValue(JSON.parse(String(storedValue)) as T);
     } else if (type === 'number') {
       setValue(Number(storedValue) as T);
     } else if (type === 'object') {
-      setValue(JSON.parse(String(storedValue ?? null)) as T);
+      if (storedValue === 'undefined') {
+        setValue(undefined as unknown as T);
+      } else {
+        setValue(JSON.parse(String(storedValue)) as T);
+      }
     } else {
       setValue(storedValue as T);
     }
@@ -74,14 +80,23 @@ export const useLocalStorage = <T>({
       skipSaveRef.current = false;
       return;
     }
-    saveToStorage(key, typeof value === 'object' ? JSON.stringify(value) : value);
+    saveToStorage(key, typeof value === 'object' && value !== null ? JSON.stringify(value) : value);
   }, [key, value]);
 };
 
 export const getFromStorage = (
   key: LocalStorageKey,
   defaultValue: unknown
-): unknown => localStorage.getItem(String(key)) ?? defaultValue;
+): unknown => {
+  const val = localStorage.getItem(String(key));
+  if (val === 'undefined') return defaultValue;
+  return val ?? defaultValue;
+};
 
-export const saveToStorage = (key: LocalStorageKey, value: unknown) =>
-  localStorage.setItem(String(key), String(value));
+export const saveToStorage = (key: LocalStorageKey, value: unknown) => {
+  if (value === undefined) {
+    localStorage.removeItem(String(key));
+  } else {
+    localStorage.setItem(String(key), String(value));
+  }
+};

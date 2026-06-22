@@ -1,1 +1,93 @@
-if(!self.define){let e,s={};const a=(a,n)=>(a=new URL(a+".js",n).href,s[a]||new Promise((s=>{if("document"in self){const e=document.createElement("script");e.src=a,e.onload=s,document.head.appendChild(e)}else e=a,importScripts(a),s()})).then((()=>{let e=s[a];if(!e)throw new Error(`Module ${a} didn’t register its module`);return e})));self.define=(n,i)=>{const t=e||("document"in self?document.currentScript.src:"")||location.href;if(s[t])return;let c={};const f=e=>a(e,t),o={module:{uri:t},exports:c,require:f};s[t]=Promise.all(n.map((e=>o[e]||f(e)))).then((e=>(i(...e),c)))}}define(["./workbox-4754cb34"],(function(e){"use strict";importScripts(),self.skipWaiting(),e.clientsClaim(),e.precacheAndRoute([{url:"/_next/app-build-manifest.json",revision:"87f0ca97d5ed23f8d2b845dab238186a"},{url:"/_next/static/BUJ8-ZJ40Cw1htAR8PJxA/_buildManifest.js",revision:"e7ac8479043ecfe785d0a4c7e19745bb"},{url:"/_next/static/BUJ8-ZJ40Cw1htAR8PJxA/_ssgManifest.js",revision:"b6652df95db52feb4daf4eca35380933"},{url:"/_next/static/chunks/4bd1b696-39451bf46d4e88b0.js",revision:"BUJ8-ZJ40Cw1htAR8PJxA"},{url:"/_next/static/chunks/627-58f2a7c33105b62f.js",revision:"BUJ8-ZJ40Cw1htAR8PJxA"},{url:"/_next/static/chunks/684-2f02413e28742143.js",revision:"BUJ8-ZJ40Cw1htAR8PJxA"},{url:"/_next/static/chunks/870fdd6f-ec919ce36d42821c.js",revision:"BUJ8-ZJ40Cw1htAR8PJxA"},{url:"/_next/static/chunks/app/_not-found/page-2fed7d7cc4d512dc.js",revision:"BUJ8-ZJ40Cw1htAR8PJxA"},{url:"/_next/static/chunks/app/layout-35a110d36e188882.js",revision:"BUJ8-ZJ40Cw1htAR8PJxA"},{url:"/_next/static/chunks/app/page-0f2539392d77f7e2.js",revision:"BUJ8-ZJ40Cw1htAR8PJxA"},{url:"/_next/static/chunks/framework-f593a28cde54158e.js",revision:"BUJ8-ZJ40Cw1htAR8PJxA"},{url:"/_next/static/chunks/main-1964cc3b2bd7d260.js",revision:"BUJ8-ZJ40Cw1htAR8PJxA"},{url:"/_next/static/chunks/main-app-de22694779293e2c.js",revision:"BUJ8-ZJ40Cw1htAR8PJxA"},{url:"/_next/static/chunks/pages/_app-da15c11dea942c36.js",revision:"BUJ8-ZJ40Cw1htAR8PJxA"},{url:"/_next/static/chunks/pages/_error-cc3f077a18ea1793.js",revision:"BUJ8-ZJ40Cw1htAR8PJxA"},{url:"/_next/static/chunks/polyfills-42372ed130431b0a.js",revision:"846118c33b2c0e922d7b3a7676f81f6f"},{url:"/_next/static/chunks/webpack-94714722af225a65.js",revision:"BUJ8-ZJ40Cw1htAR8PJxA"},{url:"/_next/static/css/5f139367842de294.css",revision:"5f139367842de294"},{url:"/_next/static/css/fb965607128c9f58.css",revision:"fb965607128c9f58"},{url:"/_next/static/media/0f1bdadaf30e2d5f-s.woff2",revision:"7ffd9af8193278e5330da4a0abc2ee71"},{url:"/_next/static/media/22a5144ee8d83bca-s.p.woff2",revision:"f4634c3bc1fa7cb53247e1f2872adb5a"},{url:"/_next/static/media/2c34d62a75506231-s.woff2",revision:"677f33f1c7ed560d5885e21734cd8ce5"},{url:"/_next/static/media/601f5c280d60caca-s.woff2",revision:"c2bc2ad5f509be48ce8974180a3dbd47"},{url:"/_next/static/media/9766a7e9e2e0ad5a-s.woff2",revision:"9a45f5a5937490fac6d4f5043a36c125"},{url:"/_next/static/media/a115172161b307bb-s.woff2",revision:"ef57990a371e9f21bacdef1e62efa44c"},{url:"/_next/static/media/aa016aab0e6d1295-s.woff2",revision:"49215a3bccaeb5d483f4cf8fceb24776"},{url:"/_next/static/media/b66cf8e69499582a-s.woff2",revision:"dea7cff2e11a000dc4e0e913992f9c21"},{url:"/_next/static/media/d100b2a099e34044-s.woff2",revision:"faf6ccaa8812142c4dad31d50bc2b24f"},{url:"/_next/static/media/f5271587012faf78-s.p.woff2",revision:"075226e68ad06f734d7920a0fcd35b39"},{url:"/_next/static/media/f639721981034f88-s.woff2",revision:"f4a75186954722ca80df35984adf581d"},{url:"/file.svg",revision:"d09f95206c3fa0bb9bd9fefabfd0ea71"},{url:"/globe.svg",revision:"2aaafa6a49b6563925fe440891e32717"},{url:"/icons/apple-touch-icon-120x120.png",revision:"b62de8a70716bb36ca0135ce9dde92ff"},{url:"/icons/apple-touch-icon-180x180.png",revision:"d538ee98d3ccd2490bdc15b9fd81bced"},{url:"/icons/icon-192x192.png",revision:"66ed2be9862f214a2bbe550875b2728e"},{url:"/icons/icon-512x512.png",revision:"d706f9bcf620348be7945d14dc0cf4ec"},{url:"/manifest.json",revision:"0c21823eaf53482ccb517e3443c97521"},{url:"/next.svg",revision:"8e061864f388b47f33a1c3780831193e"},{url:"/vercel.svg",revision:"c0af2f507b369b085b35ef4bbe3bcf1e"},{url:"/window.svg",revision:"a2760511c65806022ad20adf74370ff3"}],{ignoreURLParametersMatching:[]}),e.cleanupOutdatedCaches(),e.registerRoute("/",new e.NetworkFirst({cacheName:"start-url",plugins:[{cacheWillUpdate:async({request:e,response:s,event:a,state:n})=>s&&"opaqueredirect"===s.type?new Response(s.body,{status:200,statusText:"OK",headers:s.headers}):s}]}),"GET"),e.registerRoute(/^https:\/\/fonts\.(?:gstatic)\.com\/.*/i,new e.CacheFirst({cacheName:"google-fonts-webfonts",plugins:[new e.ExpirationPlugin({maxEntries:4,maxAgeSeconds:31536e3})]}),"GET"),e.registerRoute(/^https:\/\/fonts\.(?:googleapis)\.com\/.*/i,new e.StaleWhileRevalidate({cacheName:"google-fonts-stylesheets",plugins:[new e.ExpirationPlugin({maxEntries:4,maxAgeSeconds:604800})]}),"GET"),e.registerRoute(/\.(?:eot|otf|ttc|ttf|woff|woff2|font.css)$/i,new e.StaleWhileRevalidate({cacheName:"static-font-assets",plugins:[new e.ExpirationPlugin({maxEntries:4,maxAgeSeconds:604800})]}),"GET"),e.registerRoute(/\.(?:jpg|jpeg|gif|png|svg|ico|webp)$/i,new e.StaleWhileRevalidate({cacheName:"static-image-assets",plugins:[new e.ExpirationPlugin({maxEntries:64,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\/_next\/image\?url=.+$/i,new e.StaleWhileRevalidate({cacheName:"next-image",plugins:[new e.ExpirationPlugin({maxEntries:64,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\.(?:mp3|wav|ogg)$/i,new e.CacheFirst({cacheName:"static-audio-assets",plugins:[new e.RangeRequestsPlugin,new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\.(?:mp4)$/i,new e.CacheFirst({cacheName:"static-video-assets",plugins:[new e.RangeRequestsPlugin,new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\.(?:js)$/i,new e.StaleWhileRevalidate({cacheName:"static-js-assets",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\.(?:css|less)$/i,new e.StaleWhileRevalidate({cacheName:"static-style-assets",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\/_next\/data\/.+\/.+\.json$/i,new e.StaleWhileRevalidate({cacheName:"next-data",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\.(?:json|xml|csv)$/i,new e.NetworkFirst({cacheName:"static-data-assets",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute((({url:e})=>{if(!(self.origin===e.origin))return!1;const s=e.pathname;return!s.startsWith("/api/auth/")&&!!s.startsWith("/api/")}),new e.NetworkFirst({cacheName:"apis",networkTimeoutSeconds:10,plugins:[new e.ExpirationPlugin({maxEntries:16,maxAgeSeconds:86400})]}),"GET"),e.registerRoute((({url:e})=>{if(!(self.origin===e.origin))return!1;return!e.pathname.startsWith("/api/")}),new e.NetworkFirst({cacheName:"others",networkTimeoutSeconds:10,plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute((({url:e})=>!(self.origin===e.origin)),new e.NetworkFirst({cacheName:"cross-origin",networkTimeoutSeconds:10,plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:3600})]}),"GET")}));
+const CACHE_NAME = 'tabata-timer-cache-v1';
+const ASSETS_TO_CACHE = [
+  '/',
+  '/manifest.json',
+  '/icons/icon-192x192.png',
+  '/icons/icon-512x512.png',
+  '/icons/apple-touch-icon-120x120.png',
+  '/icons/apple-touch-icon-180x180.png',
+];
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(ASSETS_TO_CACHE);
+    })
+  );
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cache) => {
+          if (cache !== CACHE_NAME) {
+            return caches.delete(cache);
+          }
+        })
+      );
+    })
+  );
+  self.clients.claim();
+});
+
+self.addEventListener('fetch', (event) => {
+  const { request } = event;
+  const url = new URL(request.url);
+
+  // Check if it's a navigation request (i.e. requesting a page)
+  if (request.mode === 'navigate' || (request.method === 'GET' && url.origin === self.origin && url.pathname === '/')) {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+          return response;
+        })
+        .catch(() => {
+          return caches.match('/');
+        })
+    );
+    return;
+  }
+
+  // Only handle GET requests for static assets on our origin
+  if (request.method !== 'GET') return;
+
+  const isStaticAsset =
+    url.origin === self.origin &&
+    (url.pathname.startsWith('/_next/') ||
+      url.pathname.startsWith('/icons/') ||
+      url.pathname === '/manifest.json' ||
+      url.pathname === '/favicon.ico');
+
+  if (isStaticAsset) {
+    event.respondWith(
+      caches.match(request).then((cachedResponse) => {
+        if (cachedResponse) {
+          // Serve from cache and update in background (Stale-While-Revalidate)
+          fetch(request).then((networkResponse) => {
+            if (networkResponse.status === 200) {
+              caches.open(CACHE_NAME).then((cache) => cache.put(request, networkResponse));
+            }
+          }).catch(() => {
+            // Ignore background fetch errors
+          });
+          return cachedResponse;
+        }
+
+        return fetch(request).then((networkResponse) => {
+          if (!networkResponse || networkResponse.status !== 200) {
+            return networkResponse;
+          }
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(request, responseToCache);
+          });
+          return networkResponse;
+        });
+      })
+    );
+  }
+});
